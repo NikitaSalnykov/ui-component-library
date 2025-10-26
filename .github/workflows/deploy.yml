@@ -11,22 +11,17 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Setup Node 24
+      - name: Setup Node 20 (LTS)
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
-
-
-   - name: Fresh install on Linux
-  run: |
-    rm -f package-lock.json
-    npm install --no-audit --no-fund
-
-
-      - name: Clean install
-        run: npm ci
+      - name: Fresh install on Linux
+        run: |
+          rm -f package-lock.json
+          rm -rf node_modules
+          npm install --no-audit --no-fund
 
       - name: Build 🔧
         run: |
