@@ -31,12 +31,10 @@
   },
   "description": "React UI component library with demo site (Vite + Tailwind).",
   "license": "MIT",
-  "main": "dist/index.cjs",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+"main": "dist/index.js",
+"module": "dist/index.mjs",
+"types": "dist/main.d.ts",
+"files": ["dist"],
   "sideEffects": false,
   "peerDependencies": {
     "react": ">=18.0.0",
