@@ -26,7 +26,7 @@ jobs:
       - name: Build 🔧
         run: |
           npm run build:site
-          cp ./dist/index.html ./dist/404.html
+          cp ./dist-site/index.html ./dist-site/404.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.0
