@@ -33,7 +33,7 @@
   "license": "MIT",
 "main": "dist/index.js",
 "module": "dist/index.mjs",
-"types": "dist/main.d.ts",
+"types": "dist/components/index.d.ts",
 "files": ["dist"],
   "sideEffects": false,
   "peerDependencies": {
