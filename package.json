@@ -8,9 +8,8 @@
     "preview": "vite preview -c vite.config.site.ts --outDir dist-site",
     "build:lib": "vite build -c vite.config.lib.ts",
     "build:site": "vite build -c vite.config.site.ts",
-    "prepublishOnly": "npm run build:lib",
-    "prepare": "npm run build:lib"
-  },
+    "prepublishOnly": "npm run build:lib"
+     },
   "dependencies": {
     "clsx": "^2.1.1",
     "react": "^18.2.0",
