@@ -1,6 +1,6 @@
-export * from './Badge';
+import '../index.css';
 export * from './Button';
-export * from './Checkbox';
-export * from './Footer';
 export * from './Input';
+export * from './Checkbox';
 export * from './Radio';
+export * from './Badge';

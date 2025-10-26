@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Basic resets for showcase */
-body { @apply bg-gray-50 text-gray-900; }
-.container { @apply max-w-5xl mx-auto p-6; }
+body {
+  @apply bg-gray-50 text-gray-900;
+}
+.container {
+  @apply max-w-5xl mx-auto p-6;
+}

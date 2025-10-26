@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import dts from 'vite-plugin-dts';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   plugins: [react(), dts()],
@@ -17,4 +17,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
-});
+  css: {
+    postcss: './postcss.config.js',
+  },
+})
