@@ -30,16 +30,16 @@
   },
   "description": "React UI component library with demo site (Vite + Tailwind).",
   "license": "MIT",
- "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.mjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
-    "./dist/components/index.d.ts": "./dist/components/index.d.ts"
+    "./dist/style.css": "./dist/style.css"
   },
 "files": ["dist"],
   "sideEffects": false,
