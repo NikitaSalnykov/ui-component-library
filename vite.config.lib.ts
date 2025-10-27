@@ -8,7 +8,7 @@ export default defineConfig({
     lib: {
       entry: './src/components/index.ts',
       name: 'ui-library',
-      fileName: (format) => (format === 'es' ? 'index' : 'index.cjs'),
+      fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'),
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
