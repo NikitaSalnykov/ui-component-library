@@ -10,6 +10,27 @@ import Section from "../components/Section/Section";
 import VariantGrid from "../components/VariantGrid/VariantGrid";
 import Card from "../components/Card/Card";
 import { Badge } from "../components/Badge";
+import { Avatar } from "../components/Avatart";
+import { Tabs } from "../components/Tabs";
+
+
+const TabsShowcase: React.FC = () => {
+  return (
+<VariantGrid>
+<Tabs.Root defaultValue="profile">
+        <Tabs.List>
+          <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
+          <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+          <Tabs.Trigger value="security" disabled>Security</Tabs.Trigger>
+        </Tabs.List>
+
+        <Tabs.Content value="profile">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem nihil, ipsa, similique suscipit voluptatum reiciendis mollitia nobis quidem modi beatae ratione iste, perspiciatis delectus quisquam.</Tabs.Content>
+        <Tabs.Content value="settings">Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque dolore distinctio optio consequatur iste reprehenderit?</Tabs.Content>
+        <Tabs.Content value="security">Lorem ipsum dolor sit amet.</Tabs.Content>
+      </Tabs.Root>
+</VariantGrid>
+  )
+}
 
 const ButtonShowcase: React.FC = () => {
   return (
@@ -202,6 +223,39 @@ const BadgeShowcase: React.FC = () => {
   );
 };
 
+const AvatarShowcase: React.FC = () => {
+  return (
+    <VariantGrid>
+      <Card title="Basic / Sizes">
+        <div className="flex flex-wrap items-center gap-4">
+          <Avatar name="Nikita Salnykov" size="sm" />
+          <Avatar name="Nikita Salnykov" size="md" />
+          <Avatar name="Nikita Salnykov" size="lg" />
+          <Avatar name="Nikita Salnykov" size="xl" />
+        </div>
+      </Card>
+
+      <Card title="Image / Fallback / Shadow">
+        <div className="flex flex-wrap items-center gap-4">
+          <Avatar  src="https://avatars.githubusercontent.com/u/121830017?v=4" size="xl" alt="User A" withShadow />
+          <Avatar src="https://img.freepik.com/premium-vector/broken-image-icon_268104-8936.jpg" name="Broken Image" withShadow />
+          <Avatar  src="https://avatars.githubusercontent.com/u/121830017?v=4" showFallback size="sm" />
+        </div>
+      </Card>
+
+      <Card title="Rounded / Status">
+        <div className="flex flex-wrap items-center gap-6">
+          <Avatar name="Square" rounded="none" status="online" />
+          <Avatar name="Rounded" rounded="md" status="busy" />
+          <Avatar name="Circle 1" rounded="full" status="away" className="bg-red-500 text-white"/>
+          <Avatar name="Circle 2" rounded="full" status="offline" className="bg-green-700 text-white"/>
+          <Avatar name="Circle 3" rounded="full" status="none" className="bg-yellow-500 text-white"/>
+        </div>
+      </Card>
+    </VariantGrid>
+  );
+};
+
 const App: React.FC = () => {
   const nav = [
     { id: "buttons", label: "Button" },
@@ -209,6 +263,8 @@ const App: React.FC = () => {
     { id: "checkboxes", label: "Checkbox" },
     { id: "radios", label: "Radio" },
     { id: "badges", label: "Badge" },
+    { id: "avatars", label: "Avatar" },
+
   ];
 
   return (
@@ -256,6 +312,16 @@ const App: React.FC = () => {
       >
         <BadgeShowcase />
       </Section>
+
+      <Section id="avatars" title="Avatar" description="Аватар з підтримкою зображення, ініціалів та fallback.">
+  <AvatarShowcase />
+</Section> 
+ 
+ <Section id="tabs"
+        title="Tabs">
+  <TabsShowcase/>
+ </Section>
+
     </ShowcaseLayout>
   );
 };
