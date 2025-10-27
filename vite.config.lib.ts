@@ -1,23 +1,29 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import dts from 'vite-plugin-dts'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [react(), dts()],
+  plugins: [
+    react(),
+    dts({
+      outDir: "dist",
+      entryRoot: "src/components",
+      insertTypesEntry: true,
+      copyDtsFiles: true
+    })
+  ],
   build: {
     lib: {
-      entry: './src/components/index.ts',
-      name: 'ui-library',
-      fileName: (format) => (format === 'es' ? 'index.js' : 'index.cjs'),
-      formats: ['es', 'cjs'],
+      entry: "src/components/index.ts",     
+      name: "ui-library",
+      fileName: (format) => (format === "cjs" ? "index.cjs" : "index.js"),
+      formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'clsx'],
+      external: ["react", "react-dom", "clsx"],
     },
-    outDir: 'dist',
+    outDir: "dist",
     emptyOutDir: true,
   },
-  css: {
-    postcss: './postcss.config.js',
-  },
-})
+  css: { postcss: "./postcss.config.js" },
+});
