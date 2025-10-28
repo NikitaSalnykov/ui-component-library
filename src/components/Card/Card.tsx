@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card: React.FC<{ title: string; children: React.ReactNode }> = ({
+export const Card: React.FC<{ title: string; children: React.ReactNode }> = ({
   title,
   children,
 }) => {

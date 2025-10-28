@@ -16,12 +16,14 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     } = props;
     const internalRef = useRef<HTMLInputElement>(null);
 
+    const mixed = indeterminate && !checked;
+
+
     useEffect(() => {
-      console.log("indeterminate", indeterminate);
       if (internalRef.current) {
         internalRef.current.indeterminate = !!indeterminate;
       }
-    }, [indeterminate]);
+    }, [indeterminate, checked]);
 
     return (
       <label
@@ -46,8 +48,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             className={clsx(
               "appearance-none h-5 w-5 rounded border",
               "focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-600",
-              "checked:bg-indigo-600 checked:border-indigo-600",
-              indeterminate && "bg-indigo-600",
+              (checked || mixed) && "bg-indigo-600 border-indigo-600",
               className
             )}
             disabled={disabled}
@@ -55,7 +56,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             onChange={(e) => onChange?.(e.target.checked, e)}
             {...rest}
           />
-          {checked && !indeterminate && (
+          {checked && !mixed  && (
             <svg
               className="pointer-events-none absolute h-3.5 w-3.5 text-white"
               viewBox="0 0 20 20"
@@ -70,7 +71,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               />
             </svg>
           )}
-          {indeterminate && (
+          {mixed  && (
             <span className="pointer-events-none absolute h-0.5 w-2 bg-white rounded-sm"></span>
           )}
         </span>

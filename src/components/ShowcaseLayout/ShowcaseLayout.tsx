@@ -1,19 +1,17 @@
 import React, { useState } from "react";
+import { VariantGrid } from "../VariantGrid";
+import { Avatar } from "../Avatart";
 
 interface NavItem {
   id: string;
   label: string;
 }
 interface Props {
-  title: string;
-  subtitle?: string;
   nav: NavItem[];
   children: React.ReactNode;
 }
 
 const ShowcaseLayout: React.FC<Props> = ({
-  title,
-  subtitle,
   nav,
   children,
 }) => {
@@ -30,8 +28,24 @@ const ShowcaseLayout: React.FC<Props> = ({
   return (
     <div className="container">
       <header className="mb-6">
-        <h1 className="text-3xl font-semibold">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+      <VariantGrid className="items-center gap-2 justify-center text-center md:justify-start md:text-start">
+      <div>
+      <h1 className="text-3xl font-semibold">UI Library — Showcase</h1>
+     <p className="text-sm text-gray-600">Бібліотека компонентів v1.0
+      </p>
+      </div>
+      <div className=" flex flex-col-reverse  md:flex-row md:justify-end items-center gap-1 md:gap-4 ">
+        <div className="flex flex-col">
+        <p className="text-md p-0">by Salnykov Nikita</p>
+        <div className="flex gap-2 w-full justify-center md:justify-start">
+        <a href="https://github.com/NikitaSalnykov/ui-component-library" className="text-xs underline text-blue-900 ">Open github</a>
+        {/* <a href="tel=380672037580" className="text-xs">+380672037580</a> */}
+        </div>
+        {/* <a href="mailto=salnikov.nkt@gmail.com" className="text-xs">salnikov.nkt@gmail.com</a> */}
+        </div>
+      <Avatar src="https://avatars.githubusercontent.com/u/121830017?v=4" size="sm" alt="Salnikov Nikita"/>
+      </div>
+      </VariantGrid>
       </header>
 
       <div className="flex gap-6 flex-col md:flex-row items-start">
@@ -58,7 +72,7 @@ const ShowcaseLayout: React.FC<Props> = ({
             </ul>
           </nav>
         </aside>
-        <main className="space-y-6">{children}</main>
+        <main className="space-y-6 md:w-[80%]">{children}</main>
       </div>
     </div>
   );

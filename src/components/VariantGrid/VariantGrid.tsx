@@ -1,7 +1,8 @@
 import React from 'react'
+import clsx from 'clsx'
 
-const VariantGrid: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <div className="grid md:grid-cols-2 gap-6">{children}</div>
+export const VariantGrid: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className }) => {
+  return <div className={clsx("grid md:grid-cols-2 gap-6", className)}>{children}</div>
 }
 
 export default VariantGrid

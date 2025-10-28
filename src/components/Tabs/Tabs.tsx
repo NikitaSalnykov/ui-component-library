@@ -10,21 +10,45 @@ import {
 type Ctx = {
   value: string | undefined;
   setValue: (v: string) => void;
+  register: (value: string, ref: HTMLButtonElement | null) => void;
+  tabs: string[];
+  getRef: (value: string) => HTMLButtonElement | null;
 };
 
 const TabsCtx = React.createContext<Ctx | null>(null);
 
 const useTabsCtx = () => {
   const ctx = React.useContext(TabsCtx);
-  if (!ctx) throw new Error("Use Tabs components inside <Tabs.Root>");
+  if (!ctx) throw new Error("use <Tabs.Root>");
   return ctx;
 };
 
 const Root: React.FC<TabsRootProps> = ({defaultValue, className, children}) => {
   const [value, setValue] = React.useState<string | undefined>(defaultValue);
+  
+  const refMap = React.useRef(new Map<string, HTMLButtonElement | null>());
+  const tabsRef = React.useRef<string[]>([]);
+
+  const register = (v: string, ref: HTMLButtonElement | null) => {
+    if (!tabsRef.current.includes(v)) tabsRef.current.push(v);
+    refMap.current.set(v, ref);
+  };
+
+  const getRef = (v: string) => {
+    const ref = refMap.current.get(v);
+    if (!ref) return null;
+    return ref;
+  }
+
 
   return (
-    <TabsCtx.Provider value={{ value, setValue }}>
+    <TabsCtx.Provider value={{
+      value,
+      setValue,
+      register,             
+      tabs: tabsRef.current,
+      getRef,             
+    }}>
       <div className={className}>{children}</div>
     </TabsCtx.Provider>
   );
@@ -42,14 +66,48 @@ const List: React.FC<TabsListProps> = ({ className, children }) => {
   );
 }
 
-const Trigger: React.FC<TabsTriggerProps> = ({ value, disabled, className, children }) => {
-  const { value: active, setValue } = useTabsCtx();
+const Trigger: React.FC<TabsTriggerProps> = ({ value, disabled , className, children }) => {
+  const { value: active, setValue, register, tabs, getRef  } = useTabsCtx();
   const isActive = active === value;
+
+  const btnRef = React.useRef<HTMLButtonElement | null>(null);
+
+  React.useEffect(() => {
+    if (!disabled) register(value, btnRef.current);
+  }, [disabled, register, value]);
+
+  const focusAndActivate = (nextValue: string) => {
+    setValue(nextValue);
+    getRef(nextValue)?.focus();
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    console.log(e);
+    console.log(value);
+    if (disabled) return;
+
+    const code = e.key;
+    if (code !== "ArrowLeft" && code !== "ArrowRight" && code !== "Home" && code !== "End")
+      return;
+
+    e.preventDefault();
+
+    const idx = tabs.indexOf(value);
+    if (idx === -1 || tabs.length === 0) return;
+
+    let nextIdx = idx;
+    if (code === "ArrowLeft") nextIdx = (idx - 1 + tabs.length) % tabs.length;
+    if (code === "ArrowRight") nextIdx = (idx + 1) % tabs.length;
+
+    const nextValue = tabs[nextIdx];
+    if (nextValue) focusAndActivate(nextValue);
+  }
 
   return (
     <button
       type="button"
       role="tab"
+     ref={btnRef}
       id={`tab-${value}`}
       aria-selected={isActive}
       aria-controls={`panel-${value}`}
@@ -61,6 +119,7 @@ const Trigger: React.FC<TabsTriggerProps> = ({ value, disabled, className, child
         disabled && "opacity-50 cursor-not-allowed",
         className
       )}
+      onKeyDown={onKeyDown}
     >
       {children}
     </button>
@@ -78,7 +137,7 @@ const Content: React.FC<TabsContentProps> = ({ value, className, children }) => 
       id={`panel-${value}`}
       aria-labelledby={`tab-${value}`}
       hidden={!isActive}
-      className={clsx("mt-3 rounded-xl border border-gray-200 p-4", className)}
+      className={clsx("mt-3 rounded-xl btabs btabs-gray-200 p-4", className)}
     >
       {isActive && children}
     </div>
