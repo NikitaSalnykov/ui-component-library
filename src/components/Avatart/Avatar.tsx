@@ -58,7 +58,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
           "relative inline-flex shrink-0 items-center justify-center select-none bg-blue-100 text-gray-600",
           sizeMap[size],
           roundedMap[rounded],
-          withShadow && " shadow-black shadow-md",
+          withShadow && "shadow-md shadow-gray-500",
           className
         )}
         aria-label={alt ?? name ?? "avatar"}

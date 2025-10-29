@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VariantGrid } from "../VariantGrid";
 import { Avatar } from "../Avatart";
+import { Badge } from "../Badge";
 
 interface NavItem {
   id: string;
@@ -31,8 +32,12 @@ const ShowcaseLayout: React.FC<Props> = ({
       <VariantGrid className="items-center gap-2 justify-center text-center md:justify-start md:text-start">
       <div>
       <h1 className="text-3xl font-semibold">UI Library — Showcase</h1>
-     <p className="text-sm text-gray-600">Бібліотека компонентів v1.0
-      </p>
+<div className=" flex gap-2">
+<p className="text-sm text-gray-600">Бібліотека компонентів
+      </p>{' '}
+      <Badge variant="primary">beta</Badge>
+
+</div>
       </div>
       <div className=" flex flex-col-reverse  md:flex-row md:justify-end items-center gap-1 md:gap-4 ">
         <div className="flex flex-col">
