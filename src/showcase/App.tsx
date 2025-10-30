@@ -5,15 +5,17 @@ import { Checkbox } from '../components/Checkbox';
 import { Radio, RadioGroup } from '../components/Radio';
 import '../index.css';
 
-import ShowcaseLayout from '../components/ShowcaseLayout/ShowcaseLayout';
+import ShowcaseLayout, { NavItem } from '../components/ShowcaseLayout/ShowcaseLayout';
 import Section from '../components/Section/Section';
 import VariantGrid from '../components/VariantGrid/VariantGrid';
 import Card from '../components/Card/Card';
 import { Badge } from '../components/Badge';
 import { Avatar } from '../components/Avatart';
 import { Tabs } from '../components/Tabs';
-import { ToastProvider, useToast } from '../components/Toast';
+import { useToast } from '../components/Toast';
 import { Modal } from '../components/Modal';
+import { Form, useForm } from '../components/Form/Form';
+import { CheckboxField, InputField, RadioGroupField } from '../components/Form/FormFields';
 
 interface ShowCaseContainerProps {
   preview: React.ReactNode;
@@ -24,6 +26,28 @@ interface ShowCaseContainerProps {
 interface CodeBlockProps {
   code: string;
 }
+
+type ProfileForm = {
+  fullName: string;
+  email: string;
+  role: string;
+  agree: boolean;
+  skills: string[];
+};
+
+const initial: ProfileForm = {
+  fullName: "",
+  email: "",
+  role: "user",
+  agree: false,
+  skills: [],
+};
+
+const rules = {
+  fullName: { required: true, minLen: 2 },
+  email: { required: true, email: true },
+  agree: { required: "Підтвердіть згоду" },
+};
 
 
 const codes: Record<string, string> = {
@@ -292,7 +316,78 @@ modal: `....
     </div>
   </div>
 </Modal>
-....`
+....`,
+form: `const form = useForm<ProfileForm>(initial, rules);
+...
+retun(
+  ....
+<Form form={form} onSubmit={submit}  className="space-y-4 p-4 bg-slate-100 border-slate-300 border rounded-xl">
+<InputField form={form} name="fullName" label="Повне імʼя" placeholder="Іван Петренко" />
+<InputField form={form} name="email" label="Email" type="email" placeholder="name@example.codm" />
+
+<RadioGroupField
+  form={form}
+  name="role"
+  label="Роль"
+  options={[
+    { label: "Користувач", value: "user" },
+    { label: "Модератор", value: "moderator" },
+    { label: "Адмін", value: "admin" },
+  ]}
+/>
+
+<div className="flex gap-2 items-center">
+<CheckboxField form={form} name="agree"/>
+Погоджуюсь з умовами
+</div>
+
+<div className="pt-2 flex gap-2 justify-center">
+  <Button type="submit" variant="primary">Надіслати</Button>
+  <Button type="button" variant="outline" onClick={() => form.reset(initial)}>Скинути</Button>
+</div>
+</Form>
+)`
+
+};
+
+const FormShowcase: React.FC = () => {
+  const form = useForm<ProfileForm>(initial, rules);
+  const {success} = useToast()
+  const submit = (vals: ProfileForm) => {
+    console.log("submit:", vals);
+    success(`${form.values.fullName}! Account create!`)
+    form.reset(initial)
+  };
+
+  return (
+    <div className='max-w-[350px]'>
+       <Form form={form} onSubmit={submit}  className="space-y-4 p-4 bg-slate-100 border-slate-300 border rounded-xl">
+          <InputField form={form} name="fullName" label="Повне імʼя" placeholder="Іван Петренко" />
+          <InputField form={form} name="email" label="Email" type="email" placeholder="name@example.codm" />
+          
+          <RadioGroupField
+            form={form}
+            name="role"
+            label="Роль"
+            options={[
+              { label: "Користувач", value: "user" },
+              { label: "Модератор", value: "moderator" },
+              { label: "Адмін", value: "admin" },
+            ]}
+          />
+
+          <div className="flex gap-2 items-center">
+          <CheckboxField form={form} name="agree"/>
+          Погоджуюсь з умовами
+          </div>
+
+          <div className="pt-2 flex gap-2 justify-center">
+            <Button type="submit" variant="primary">Надіслати</Button>
+            <Button type="button" variant="outline" onClick={() => form.reset(initial)}>Скинути</Button>
+          </div>
+        </Form>
+     </div>
+  );
 };
 
 const TabsShowcase: React.FC = () => {
@@ -339,13 +434,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
       <Button
         variant="outline"
         onClick={handleCopy}
-        className="absolute right-3 top-3"
+        className="absolute right-3 top-3 bg-slate-50"
         size="sm"
       >
         Copy
       </Button>
 
-      <pre className="overflow-x-auto whitespace-pre-wrap rounded-lg border border-gray-200 bg-slate-100 p-4 text-sm font-mono leading-relaxed text-gray-800">
+      <pre className=" overflow-x-auto whitespace-pre-wrap rounded-lg border border-gray-200 bg-slate-100 p-4 text-sm font-mono leading-relaxed text-gray-800">
         <code>{code}</code>
       </pre>
     </div>
@@ -714,7 +809,6 @@ const ModalShowcase: React.FC = () => {
   );
 };
 
-
 const BadgeShowcase: React.FC = () => {
   return (
     <VariantGrid>
@@ -822,21 +916,33 @@ const AvatarShowcase: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const nav = [
-    { id: 'init', label: 'Встановлення' },
-    { id: 'buttons', label: 'Button' },
-    { id: 'inputs', label: 'Input' },
-    { id: 'checkboxes', label: 'Checkbox' },
-    { id: 'radios', label: 'Radio' },
-    { id: 'badges', label: 'Badge' },
-    { id: 'avatars', label: 'Avatar' },
-    { id: 'tabs', label: 'Tabs' },
-    { id: 'toast', label: 'Toast' },
-    { id: 'modal', label: 'Modal' },
-  ];
+
+const nav: NavItem[] = [
+  { id: 'init', label: 'Встановлення', type: 'init' },
+  { id: 'usage', label: 'Використ.', type: 'init', disabled: true },
+
+  { id: 'buttons', label: 'Button', type: 'base' },
+  { id: 'inputs', label: 'Input', type: 'base' },
+  { id: 'checkboxes', label: 'Checkbox', type: 'base' },
+  { id: 'radios', label: 'Radio', type: 'base' },
+  { id: 'select', label: 'Select', type: 'base', disabled: true },
+
+  { id: 'badges', label: 'Badge', type: 'display' },
+  { id: 'avatars', label: 'Avatar', type: 'display' },
+  { id: 'dropdown', label: 'Dropdown', type: 'display', disabled: true },
+  { id: 'accordion', label: 'Accordion', type: 'display', disabled: true },
+
+
+
+  { id: 'tabs', label: 'Tabs', type: 'feedback' },
+  { id: 'toast', label: 'Toast', type: 'feedback' },
+  { id: 'modal', label: 'Modal', type: 'feedback' },
+
+  { id: 'form', label: 'Form', type: 'complex', disabled: false },
+  
+];
 
   return (
-    <ToastProvider position="top-right" max={3} duration={3000}>
       <ShowcaseLayout nav={nav}>
         <Section
           id="init"
@@ -940,7 +1046,8 @@ const App: React.FC = () => {
           />
         </Section>
 
-        <Section id="tabs" title="Tabs">
+        <Section id="tabs" title="Tabs"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
+>
           <ShowcaseContainer
             preview={<TabsShowcase />}
             code={codes.tabs}
@@ -948,7 +1055,8 @@ const App: React.FC = () => {
           />
         </Section>
 
-        <Section id="toast" title="Toast">
+        <Section id="toast" title="Toast"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
+>
           <ShowcaseContainer
             preview={<ToastShowcase />}
             code={codes.toast}
@@ -956,7 +1064,8 @@ const App: React.FC = () => {
           />
         </Section>
 
-        <Section id="modal" title="Modal">
+        <Section id="modal" title="Modal"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
+>
           <ShowcaseContainer
             preview={<ModalShowcase />}
             code={codes.modal}
@@ -964,10 +1073,17 @@ const App: React.FC = () => {
           />
         </Section>
 
+        <Section id="form" title="Form"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
+>
+          <ShowcaseContainer
+            preview={<FormShowcase />}
+            code={codes.form}
+            initial="preview"
+          />
+        </Section>
 
 
       </ShowcaseLayout>
-    </ToastProvider>
   );
 };
 
