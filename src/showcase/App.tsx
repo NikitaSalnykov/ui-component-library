@@ -1,26 +1,34 @@
-import React from 'react';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
-import { Checkbox } from '../components/Checkbox';
-import { Radio, RadioGroup } from '../components/Radio';
-import '../index.css';
+import React from "react";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { Checkbox } from "../components/Checkbox";
+import { Radio, RadioGroup } from "../components/Radio";
+import "../index.css";
 
-import ShowcaseLayout, { NavItem } from '../components/ShowcaseLayout/ShowcaseLayout';
-import Section from '../components/Section/Section';
-import VariantGrid from '../components/VariantGrid/VariantGrid';
-import Card from '../components/Card/Card';
-import { Badge } from '../components/Badge';
-import { Avatar } from '../components/Avatart';
-import { Tabs } from '../components/Tabs';
-import { useToast } from '../components/Toast';
-import { Modal } from '../components/Modal';
-import { Form, useForm } from '../components/Form/Form';
-import { CheckboxField, InputField, RadioGroupField } from '../components/Form/FormFields';
+import ShowcaseLayout, {
+  NavItem,
+} from "../components/ShowcaseLayout/ShowcaseLayout";
+
+import VariantGrid from "../components/VariantGrid/VariantGrid";
+import Card from "../components/Card/Card";
+import { Badge } from "../components/Badge";
+import { Avatar } from "../components/Avatart";
+import { Tabs } from "../components/Tabs";
+import { useToast } from "../components/Toast";
+import { Modal } from "../components/Modal";
+import { Form, useForm } from "../components/Form/Form";
+import {
+  CheckboxField,
+  InputField,
+  RadioGroupField,
+} from "../components/Form/FormFields";
+import { SectionContainer, Section } from "../components/Section/Section";
+import Usage from "../components/Section/Usage";
 
 interface ShowCaseContainerProps {
   preview: React.ReactNode;
   code: string;
-  initial: 'code' | 'preview';
+  initial: "code" | "preview";
 }
 
 interface CodeBlockProps {
@@ -48,7 +56,6 @@ const rules = {
   email: { required: true, email: true },
   agree: { required: "Підтвердіть згоду" },
 };
-
 
 const codes: Record<string, string> = {
   button: `<VariantGrid>
@@ -260,7 +267,7 @@ const codes: Record<string, string> = {
   </Button>
 
 </div>`,
-modal: `....
+  modal: `....
 {/* Base */}
 <button onClick={() => setOpenBase(true)} className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">Base</button>
 
@@ -317,7 +324,7 @@ modal: `....
   </div>
 </Modal>
 ....`,
-form: `const form = useForm<ProfileForm>(initial, rules);
+  form: `const form = useForm<ProfileForm>(initial, rules);
 ...
 retun(
   ....
@@ -346,47 +353,69 @@ retun(
   <Button type="button" variant="outline" onClick={() => form.reset(initial)}>Скинути</Button>
 </div>
 </Form>
-)`
-
+)`,
 };
 
 const FormShowcase: React.FC = () => {
   const form = useForm<ProfileForm>(initial, rules);
-  const {success} = useToast()
+  const { success } = useToast();
   const submit = (vals: ProfileForm) => {
     console.log("submit:", vals);
-    success(`${form.values.fullName}! Account create!`)
-    form.reset(initial)
+    success(`${form.values.fullName}! Account create!`);
+    form.reset(initial);
   };
 
   return (
-    <div className='max-w-[350px]'>
-       <Form form={form} onSubmit={submit}  className="space-y-4 p-4 bg-slate-100 border-slate-300 border rounded-xl">
-          <InputField form={form} name="fullName" label="Повне імʼя" placeholder="Іван Петренко" />
-          <InputField form={form} name="email" label="Email" type="email" placeholder="name@example.codm" />
-          
-          <RadioGroupField
-            form={form}
-            name="role"
-            label="Роль"
-            options={[
-              { label: "Користувач", value: "user" },
-              { label: "Модератор", value: "moderator" },
-              { label: "Адмін", value: "admin" },
-            ]}
-          />
+    <div className="max-w-[350px]">
+      <Form
+        form={form}
+        onSubmit={submit}
+        className="space-y-4 p-4 bg-slate-100 border-slate-300 border rounded-xl"
+      >
+        <InputField
+          form={form}
+          name="fullName"
+          label="Повне імʼя"
+          placeholder="Іван Петренко"
+        />
+        <InputField
+          form={form}
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="name@example.codm"
+        />
 
-          <div className="flex gap-2 items-center">
-          <CheckboxField form={form} name="agree"/>
+        <RadioGroupField
+          form={form}
+          name="role"
+          label="Роль"
+          options={[
+            { label: "Користувач", value: "user" },
+            { label: "Модератор", value: "moderator" },
+            { label: "Адмін", value: "admin" },
+          ]}
+        />
+
+        <div className="flex gap-2 items-center">
+          <CheckboxField form={form} name="agree" />
           Погоджуюсь з умовами
-          </div>
+        </div>
 
-          <div className="pt-2 flex gap-2 justify-center">
-            <Button type="submit" variant="primary">Надіслати</Button>
-            <Button type="button" variant="outline" onClick={() => form.reset(initial)}>Скинути</Button>
-          </div>
-        </Form>
-     </div>
+        <div className="pt-2 flex gap-2 justify-center">
+          <Button type="submit" variant="primary">
+            Надіслати
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => form.reset(initial)}
+          >
+            Скинути
+          </Button>
+        </div>
+      </Form>
+    </div>
   );
 };
 
@@ -421,11 +450,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(code);
-      success(<div className='flex gap-2'><Badge variant="success">Success</Badge><p>Code copied!
-</p></div>);
+      success(
+        <div className="flex gap-2">
+          <Badge variant="success">Success</Badge>
+          <p>Code copied!</p>
+        </div>
+      );
     } catch (err) {
-      
-      error('Error');
+      error("Error");
     }
   };
 
@@ -538,7 +570,7 @@ const InputShowcase: React.FC = () => {
 };
 
 const RadioShowcase: React.FC = () => {
-  const [val, setVal] = React.useState('b');
+  const [val, setVal] = React.useState("b");
   return (
     <VariantGrid>
       <Card title="Basic group">
@@ -570,25 +602,25 @@ const ToastShowcase: React.FC = () => {
     <div className="flex flex-wrap gap-2">
       <Button
         className="bg-green-800 hover:bg-green-600 active:bg-green-300"
-        onClick={() => success('Saved!')}
+        onClick={() => success("Saved!")}
       >
         Success
       </Button>
       <Button
         className="bg-red-700 hover:bg-red-600 active:bg-red-300"
-        onClick={() => error('Oops…')}
+        onClick={() => error("Oops…")}
       >
         Error
       </Button>
       <Button
         className="bg-blue-600 hover:bg-blue-400 active:bg-blue-300"
-        onClick={() => info('Bla-bla-bla')}
+        onClick={() => info("Bla-bla-bla")}
       >
         Info
       </Button>
       <Button
         className="bg-yellow-600 hover:bg-yellow-400 active:bg-yellow-200"
-        onClick={() => warning('Be careful')}
+        onClick={() => warning("Be careful")}
       >
         Warning
       </Button>
@@ -598,8 +630,8 @@ const ToastShowcase: React.FC = () => {
           show({
             message: <p>Custome massege 🫠</p>,
             duration: 5000,
-            type: 'info',
-            className: 'text-white bg-purple-400',
+            type: "info",
+            className: "text-white bg-purple-400",
           })
         }
       >
@@ -661,7 +693,7 @@ const ModalShowcase: React.FC = () => {
   const [openBlue, setOpenBlue] = React.useState(false);
   const [openViolet, setOpenViolet] = React.useState(false);
   const [openGray, setOpenGray] = React.useState(false);
-//в модалке 
+  //в модалке
   const [email, setEmail] = React.useState("");
   const [pwd, setPwd] = React.useState("");
   const [optA, setOptA] = React.useState(true);
@@ -672,121 +704,235 @@ const ModalShowcase: React.FC = () => {
     <>
       <VariantGrid className="flex flex-wrap gap-2">
         <div className="flex gap-2">
-        <button onClick={() => setOpenBase(true)} className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">Base</button>
-        <button onClick={() => setOpenDark(true)} className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800">Dark</button>
-        <button onClick={() => setOpenGlass(true)} className="px-4 py-2 rounded-md bg-white/40 backdrop-blur-md border border-white/50">Glass</button>
-        <button onClick={() => setOpenGray(true)} className="px-4 py-2 rounded-md bg-gray-400 text-white hover:bg-gray-500">Gray</button>
+          <button
+            onClick={() => setOpenBase(true)}
+            className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+          >
+            Base
+          </button>
+          <button
+            onClick={() => setOpenDark(true)}
+            className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800"
+          >
+            Dark
+          </button>
+          <button
+            onClick={() => setOpenGlass(true)}
+            className="px-4 py-2 rounded-md bg-white/40 backdrop-blur-md border border-white/50"
+          >
+            Glass
+          </button>
+          <button
+            onClick={() => setOpenGray(true)}
+            className="px-4 py-2 rounded-md bg-gray-400 text-white hover:bg-gray-500"
+          >
+            Gray
+          </button>
         </div>
         <div className="flex gap-2">
-        <button onClick={() => setOpenRed(true)} className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Red</button>
-        <button onClick={() => setOpenGreen(true)} className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700">Green</button>
-        <button onClick={() => setOpenBlue(true)} className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Blue</button>
-        <button onClick={() => setOpenViolet(true)} className="px-4 py-2 rounded-md bg-violet-600 text-white hover:bg-violet-700">Violet</button>
+          <button
+            onClick={() => setOpenRed(true)}
+            className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+          >
+            Red
+          </button>
+          <button
+            onClick={() => setOpenGreen(true)}
+            className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+          >
+            Green
+          </button>
+          <button
+            onClick={() => setOpenBlue(true)}
+            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+          >
+            Blue
+          </button>
+          <button
+            onClick={() => setOpenViolet(true)}
+            className="px-4 py-2 rounded-md bg-violet-600 text-white hover:bg-violet-700"
+          >
+            Violet
+          </button>
         </div>
-       
       </VariantGrid>
 
       {/* Base */}
-      <Modal open={openBase} onClose={() => setOpenBase(false)} title="Швидка дія" style="base">
+      <Modal
+        open={openBase}
+        onClose={() => setOpenBase(false)}
+        title="Швидка дія"
+        style="base"
+      >
         <p className="text-sm text-gray-700">Підтвердити виконання дії?</p>
         <div className="mt-4 flex gap-2">
-          <Button variant="outline" onClick={() => setOpenBase(false)}>Скасувати</Button>
-          <Button variant="primary" onClick={() => setOpenBase(false)}>Підтвердити</Button>
+          <Button variant="outline" onClick={() => setOpenBase(false)}>
+            Скасувати
+          </Button>
+          <Button variant="primary" onClick={() => setOpenBase(false)}>
+            Підтвердити
+          </Button>
         </div>
       </Modal>
 
       {/* Dark */}
-      <Modal open={openDark} onClose={() => setOpenDark(false)} title="Вхід" style="dark">
+      <Modal
+        open={openDark}
+        onClose={() => setOpenDark(false)}
+        title="Вхід"
+        style="dark"
+      >
         <div className="space-y-3">
           <Input
             type="email"
             label="Email"
             placeholder="name@example.com"
             value={email}
-            onChange={(v) => setEmail(v)}
+            onChange={(v) => setEmail(v.toString())}
           />
           <Input
             type="password"
             label="Пароль"
             placeholder="••••••••"
             value={pwd}
-            onChange={(v) => setPwd(v)}
+            onChange={(v) => setPwd(v.toString())}
           />
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setOpenDark(false)}>Закрити</Button>
-            <Button variant="primary" onClick={() => setOpenDark(false)}>Увійти</Button>
+            <Button variant="ghost" onClick={() => setOpenDark(false)}>
+              Закрити
+            </Button>
+            <Button variant="primary" onClick={() => setOpenDark(false)}>
+              Увійти
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Glass */}
-      <Modal open={openGlass} onClose={() => setOpenGlass(false)} title="Опції" style="glass">
+      <Modal
+        open={openGlass}
+        onClose={() => setOpenGlass(false)}
+        title="Опції"
+        style="glass"
+      >
         <div className="space-y-3">
           <div className="flex flex-col gap-2">
             <Checkbox label="Опція A" checked={optA} onChange={setOptA} />
             <Checkbox label="Опція B" checked={optB} onChange={setOptB} />
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpenGlass(false)}>Скасувати</Button>
-            <Button variant="primary" onClick={() => setOpenGlass(false)}>Застосувати</Button>
+            <Button variant="outline" onClick={() => setOpenGlass(false)}>
+              Скасувати
+            </Button>
+            <Button variant="primary" onClick={() => setOpenGlass(false)}>
+              Застосувати
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Gray */}
-      <Modal open={openGray} onClose={() => setOpenGray(false)} title="Вибір режиму" style="gray">
+      <Modal
+        open={openGray}
+        onClose={() => setOpenGray(false)}
+        title="Вибір режиму"
+        style="gray"
+      >
         <div className="space-y-3">
-          <RadioGroup label="Режим" name="mode" value={choice} onChange={setChoice}>
+          <RadioGroup
+            label="Режим"
+            name="mode"
+            value={choice}
+            onChange={setChoice}
+          >
             <Radio value="a" label="Легкий" />
             <Radio value="b" label="Звичний" />
             <Radio value="c" label="Складний" />
           </RadioGroup>
           <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenGray(false)}>OK</Button>
+            <Button variant="primary" onClick={() => setOpenGray(false)}>
+              OK
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Red */}
-      <Modal open={openRed} onClose={() => setOpenRed(false)} title="Видалення" style="red">
+      <Modal
+        open={openRed}
+        onClose={() => setOpenRed(false)}
+        title="Видалення"
+        style="red"
+      >
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Badge variant="danger">Увага</Badge>
-            <p className="text-sm">Ця дія незворотньо видалить профіль. Продовжити?</p>
+            <p className="text-sm">
+              Ця дія незворотньо видалить профіль. Продовжити?
+            </p>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpenRed(false)}>Скасувати</Button>
-            <Button variant="ghost" className="bg-rose-700 text-white hover:bg-red-700" onClick={() => setOpenRed(false)}>Видалити</Button>
+            <Button variant="outline" onClick={() => setOpenRed(false)}>
+              Скасувати
+            </Button>
+            <Button
+              variant="ghost"
+              className="bg-rose-700 text-white hover:bg-red-700"
+              onClick={() => setOpenRed(false)}
+            >
+              Видалити
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Green */}
-      <Modal open={openGreen} onClose={() => setOpenGreen(false)} title="Готово" style="green">
+      <Modal
+        open={openGreen}
+        onClose={() => setOpenGreen(false)}
+        title="Готово"
+        style="green"
+      >
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Badge variant="success">Успіх</Badge>
             <p className="text-sm">Налаштування збережено.</p>
           </div>
           <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenGreen(false)}>OK</Button>
+            <Button variant="primary" onClick={() => setOpenGreen(false)}>
+              OK
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Blue */}
-      <Modal open={openBlue} onClose={() => setOpenBlue(false)} title="Інформація" style="blue">
+      <Modal
+        open={openBlue}
+        onClose={() => setOpenBlue(false)}
+        title="Інформація"
+        style="blue"
+      >
         <div className="space-y-3">
           <p className="text-sm">Доступне оновлення</p>
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setOpenBlue(false)}>Пізніше</Button>
-            <Button variant="primary" onClick={() => setOpenBlue(false)}>Оновити</Button>
+            <Button variant="ghost" onClick={() => setOpenBlue(false)}>
+              Пізніше
+            </Button>
+            <Button variant="primary" onClick={() => setOpenBlue(false)}>
+              Оновити
+            </Button>
           </div>
         </div>
       </Modal>
 
       {/* Violet */}
-      <Modal open={openViolet} onClose={() => setOpenViolet(false)} title="Деталі" style="violet">
+      <Modal
+        open={openViolet}
+        onClose={() => setOpenViolet(false)}
+        title="Деталі"
+        style="violet"
+      >
         <div className="space-y-3">
           <Tabs.Root defaultValue="about">
             <Tabs.List>
@@ -794,14 +940,23 @@ const ModalShowcase: React.FC = () => {
               <Tabs.Trigger value="help">Допомога</Tabs.Trigger>
             </Tabs.List>
             <Tabs.Content value="about">
-              <p className="text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste quia ab reiciendis neque deleniti mollitia accusantium alias, dolore provident dignissimos.</p>
+              <p className="text-sm">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste
+                quia ab reiciendis neque deleniti mollitia accusantium alias,
+                dolore provident dignissimos.
+              </p>
             </Tabs.Content>
             <Tabs.Content value="help">
-              <p className="text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, nobis omnis. Obcaecati, ipsum molestiae!</p>
+              <p className="text-sm">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Ducimus, nobis omnis. Obcaecati, ipsum molestiae!
+              </p>
             </Tabs.Content>
           </Tabs.Root>
           <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenViolet(false)}>Зрозуміло</Button>
+            <Button variant="primary" onClick={() => setOpenViolet(false)}>
+              Зрозуміло
+            </Button>
           </div>
         </div>
       </Modal>
@@ -871,7 +1026,6 @@ const AvatarShowcase: React.FC = () => {
             src="https://avatars.githubusercontent.com/u/121830017?v=4"
             size="xl"
             alt="User A"
-            
           />
           <Avatar
             src="https://avatars.githubusercontent.com/u/121830017?v=4"
@@ -916,36 +1070,33 @@ const AvatarShowcase: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const nav: NavItem[] = [
+    { id: "init", label: "Встановлення", type: "init" },
+    { id: "usage", label: "Використ.", type: "init", disabled: true },
 
-const nav: NavItem[] = [
-  { id: 'init', label: 'Встановлення', type: 'init' },
-  { id: 'usage', label: 'Використ.', type: 'init', disabled: true },
+    { id: "buttons", label: "Button", type: "base" },
+    { id: "inputs", label: "Input", type: "base" },
+    { id: "checkboxes", label: "Checkbox", type: "base" },
+    { id: "radios", label: "Radio", type: "base" },
+    { id: "select", label: "Select", type: "base", disabled: true },
 
-  { id: 'buttons', label: 'Button', type: 'base' },
-  { id: 'inputs', label: 'Input', type: 'base' },
-  { id: 'checkboxes', label: 'Checkbox', type: 'base' },
-  { id: 'radios', label: 'Radio', type: 'base' },
-  { id: 'select', label: 'Select', type: 'base', disabled: true },
+    { id: "badges", label: "Badge", type: "display" },
+    { id: "avatars", label: "Avatar", type: "display" },
+    { id: "dropdown", label: "Dropdown", type: "display", disabled: true },
+    { id: "accordion", label: "Accordion", type: "display", disabled: true },
 
-  { id: 'badges', label: 'Badge', type: 'display' },
-  { id: 'avatars', label: 'Avatar', type: 'display' },
-  { id: 'dropdown', label: 'Dropdown', type: 'display', disabled: true },
-  { id: 'accordion', label: 'Accordion', type: 'display', disabled: true },
+    { id: "tabs", label: "Tabs", type: "feedback" },
+    { id: "toast", label: "Toast", type: "feedback" },
+    { id: "modal", label: "Modal", type: "feedback" },
 
-
-
-  { id: 'tabs', label: 'Tabs', type: 'feedback' },
-  { id: 'toast', label: 'Toast', type: 'feedback' },
-  { id: 'modal', label: 'Modal', type: 'feedback' },
-
-  { id: 'form', label: 'Form', type: 'complex', disabled: false },
-  
-];
+    { id: "form", label: "Form", type: "complex" },
+  ];
 
   return (
-      <ShowcaseLayout nav={nav}>
-        <Section
-          id="init"
+    <ShowcaseLayout nav={nav}>
+      {/* init */}
+      <Section id="init">
+        <SectionContainer
           title="Встановлення"
           description="Як встановити та застосувати бібліотеку"
           className="flex flex-col gap-2"
@@ -972,10 +1123,12 @@ const nav: NavItem[] = [
   RadioGroup,
 } from "ui-component-library";`}
           />
-        </Section>
+        </SectionContainer>
+      </Section>
 
-        <Section
-          id="buttons"
+      {/* buttons */}
+      <Section id="buttons">
+        <SectionContainer
           title="Button"
           description="Кнопки з варіантами, розмірами та станами."
         >
@@ -984,10 +1137,34 @@ const nav: NavItem[] = [
             code={codes.button}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
 
-        <Section
-          id="inputs"
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>label</b>: string — підпис над полем
+            </li>
+            <li>
+              <b>error</b>: string — текст помилки під полем
+            </li>
+            <li>
+              <b>containerClassName</b>, <b>className</b>: string — хуки для
+              стилів
+            </li>
+            <li>
+              <b>value</b>, <b>onChange</b> — керований режим
+            </li>
+            <li>
+              Успадковує всі нативні (напр. <b>type</b>, <b>placeholder</b>,{" "}
+              <b>required</b>, <b>disabled</b>)
+            </li>
+          </ul>
+        </Usage>
+      </Section>
+
+      {/* inputs */}
+      <Section id="inputs">
+        <SectionContainer
           title="Input"
           description="Текстові поля з label, helper, error, розмірами та адорнментами."
         >
@@ -996,46 +1173,152 @@ const nav: NavItem[] = [
             code={codes.inputs}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <Usage>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <b>label</b>: string — підпис над полем
+              </li>
+              <li>
+                <b>helperText</b>: string — підказка під полем
+              </li>
+              <li>
+                <b>inputSize</b>: "sm" | "md" | "lg" - розмір
+              </li>
+              <li>
+                <b>containerClassName</b>, <b>className</b>: string - стилізація
+                контейнера/інпута
+              </li>
+              <li>
+                Успадковує всі нативні (напр. <b>value</b>, <b>onChange</b>,{" "}
+                <b>type</b>, <b>placeholder</b>, <b>required</b>)
+              </li>
+            </ul>
+          </Usage>
+        </Usage>
+      </Section>
 
-        <Section
-          id="checkboxes"
+      {/* checkboxes */}
+      <Section id="checkboxes">
+        <SectionContainer
           title="Checkbox"
-          description="Текстові поля з label, helper, error, розмірами та адорнментами."
+          description="Чекбокси з підтримкою indeterminate та кастомізації."
         >
           <ShowcaseContainer
             preview={<CheckboxShowcase />}
             code={codes.checkboxes}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>label</b>: string - текст справа від чекбокса
+            </li>
+            <li>
+              <b>checked</b>: boolean - керований стан
+            </li>
+            <li>
+              <b>indeterminate</b>: boolean - «між» стан
+            </li>
+            <li>
+              <b>containerClassName</b>, <b>className</b>: string - стилізація
+              контейнера/інпута
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section
-          id="radios"
+      {/* radios */}
+      <Section id="radios">
+        <SectionContainer
           title="Radio"
-          description="Текстові поля з label, helper, error, розмірами та адорнментами."
+          description="Радіо-кнопки із групуванням та керуванням станом."
         >
           <ShowcaseContainer
             preview={<RadioShowcase />}
             code={codes.radios}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>{`<RadioGroup>`}</b>:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>name</b>?: string - ім’я групи
+                </li>
+                <li>
+                  <b>value</b>?: string - керований активний
+                </li>
+                <li>
+                  <b>label</b>?: string - aria-label для групи
+                </li>
+                <li>
+                  <b>className</b>?: string - стилізація обгортки
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b>{`<Radio>`}</b>:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>value</b>: string - значення опції (обов’язково)
+                </li>
+                <li>
+                  <b>label</b>?: string — текст праворуч
+                </li>
+                <li>
+                  <b>disabled</b>?: boolean
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section
-          id="badges"
+      {/* badges */}
+      <Section id="badges">
+        <SectionContainer
           title="Badge"
-          description="Простий бейдж з рінзними варівнтами розмірів та кольорів"
+          description="Простий бейдж з різними розмірами та кольорами."
         >
           <ShowcaseContainer
             preview={<BadgeShowcase />}
             code={codes.badges}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>variant</b>?: "neutral" | "primary" | "success" | "warning" |
+              "danger" (default "neutral")
+            </li>
+            <li>
+              <b>size</b>?: "sm" | "md" (default "sm")
+            </li>
+            <li>
+              <b>rounded</b>?: "md" | "full" (default "md")
+            </li>
+            <li>
+              <b>soft</b>?: boolean - м’якша палітра
+            </li>
+            <li>
+              <b>dot</b>?: boolean - точка-індикатор ліворуч
+            </li>
+            <li>
+              <b>className</b>: string - стилізація
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section
-          id="avatars"
+      {/* avatars */}
+      <Section id="avatars">
+        <SectionContainer
           title="Avatar"
           description="Аватар з підтримкою зображення, ініціалів та fallback."
         >
@@ -1044,46 +1327,267 @@ const nav: NavItem[] = [
             code={codes.avatars}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>src</b>?: string, <b>alt</b>?: string - джерело зображення та
+              alt
+            </li>
+            <li>
+              <b>name</b>?: string - використовується для ініціалів (fallback)
+            </li>
+            <li>
+              <b>size</b>?: "sm" | "md" | "lg" | "xl" (default "md") - розмір
+            </li>
+            <li>
+              <b>rounded</b>?: "none" | "md" | "full" (default "full") -
+              закруглення
+            </li>
+            <li>
+              <b>status</b>?: "none" | "online" | "offline" | "busy" | "away" -
+              крапка біля аватару
+            </li>
+            <li>
+              <b>withShadow</b>?: boolean — додає тінь
+            </li>
+            <li>
+              <b>showFallback</b>?: boolean - показ fallback’у (ігнопрє
+              зображення)
+            </li>
+            <li>
+              <b>className</b>?: string - стилізація
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section id="tabs" title="Tabs"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
->
+      {/* tabs */}
+      <Section id="tabs">
+        <SectionContainer
+          title="Tabs"
+          description="Вкладки з керуванням активним станом та відключенням опцій."
+        >
           <ShowcaseContainer
             preview={<TabsShowcase />}
             code={codes.tabs}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>Tabs.Root</b>: створює контекст, керує активною вкладкою{" "}
+              {`(defaultValue?: string - вкладка позамочуванню, className? - стилізація)`}
+            </li>
+            <li>
+              <b>Tabs.List</b>: контейнер кнопок{" "}
+              {`(className?: string - стилізація)`}
+            </li>
+            <li>
+              <b>Tabs.Trigger</b>: кнопка вкладки; підтримує клавіатуру
+              {`(value: string - має співпадати з value Tabs.Content для відкриття вкладки, disabled?: boolean - робе кнопку неактивною, className?: string - стилізація)`}{" "}
+              —
+            </li>
+            <li>
+              <b>Tabs.Content</b>:{" "}
+              {`(value: string - має співпадати з value Tabs.Trigger для відкриття вкладки, className?: string - стилізація)`}{" "}
+              — показується лише коли активна вкладка співпадає
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section id="toast" title="Toast"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
->
+      {/* toast */}
+      <Section id="toast">
+        <SectionContainer
+          title="Toast"
+          description="Нотифікації з провайдером та хукамі."
+        >
           <ShowcaseContainer
             preview={<ToastShowcase />}
             code={codes.toast}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>{`<ToastProvider>`}</b>:
+              <i>
+                {" "}
+                Обгорни частину UI ({`Наприклад <App/>`}) у {`<ToastProvider>`}
+              </i>
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>position</b>?: "top-right" | "top-left" | "bottom-right" |
+                  "bottom-left" (default "top-right") - позиція тостів
+                </li>
+                <li>
+                  <b>max</b>?: number (default 3) - максимум одночасних тостів
+                </li>
+                <li>
+                  <b>duration</b>?: number (default 3000 мс) - час життя
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b>useToast()</b> — хук для виклику сповіщень. Повертає методи:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>success(message)</b> - зелений тост успіху
+                </li>
+                <li>
+                  <b>error(message)</b> - червоний тост помилки
+                </li>
+                <li>
+                  <b>info(message)</b> - синій інформаційний тост
+                </li>
+                <li>
+                  <b>warning(message)</b> - жовтий тост попередження
+                </li>
+                <li>
+                  <b>remove(id)</b> — видаляє тост вручну
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section id="modal" title="Modal"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
->
+      {/* modal */}
+      <Section id="modal">
+        <SectionContainer
+          title="Modal"
+          description="Базова модалка з backdrop та закриттям по Esc."
+        >
           <ShowcaseContainer
             preview={<ModalShowcase />}
             code={codes.modal}
             initial="preview"
           />
-        </Section>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>open</b>: boolean - показ/приховування
+            </li>
+            <li>
+              <b>onClose</b>: {`() => void`} — виклик при закритті
+            </li>
+            <li>
+              <b>title</b>?: string - заголовок у шапці
+            </li>
+            <li>
+              <b>closeOnBackdrop</b>?: boolean (default true) - закриття по
+              кліку по фону
+            </li>
+            <li>
+              <b>labelledBy</b>?: string - aria-атрибут
+            </li>
+            <li>
+              <b>blur</b>?: boolean - додатковий блюр на бекдропі
+            </li>
+            <li>
+              <b>style</b>?: "base" | "glass" | "dark" | "gray" | "red" |
+              "orange" | "amber" | "yellow" | "green" | "blue" | "violet" —
+              палітра бекдропа/панелі
+            </li>
+            <li>Довільна розмітка всередині</li>
+          </ul>
+        </Usage>
+      </Section>
 
-        <Section id="form" title="Form"           description="Текстові поля з label, helper, error, розмірами та адорнментами."
->
+      {/* form */}
+      <Section id="form">
+        <SectionContainer
+          title="Form"
+          description="Приклад форми з валідацією та керованими елементами."
+        >
           <ShowcaseContainer
             preview={<FormShowcase />}
             code={codes.form}
             initial="preview"
           />
-        </Section>
-
-
-      </ShowcaseLayout>
+        </SectionContainer>
+        <Usage>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              <b>useForm()</b> - хук стану форми.
+            </li>
+            <li>
+              Повертає:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>values</b> - поточні значення
+                </li>
+                <li>
+                  <b>errors</b> - помилки валідації
+                </li>
+                <li>
+                  <b>setValue(name, v)</b> - встановити значення поля
+                </li>
+                <li>
+                  <b>getValue(name)</b> - отримати значення поля
+                </li>
+                <li>
+                  <b>handleChange(name)</b> - фабрика onChange для поля
+                </li>
+                <li>
+                  <b>handleSubmit(fn)</b> - якщо без помилок викликає{" "}
+                  <code>fn</code>
+                </li>
+                <li>
+                  <b>reset()</b> - скинути/перезаписати значення, очистити
+                  помилки
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b>rules</b>: правила для валідації
+              <pre className="text-xs bg-gray-50 p-2 rounded mt-1">{`{
+  fieldName: {
+    required?: boolean | string, // true або "повідомлення"
+    minLen?: number,             // мінімальна довжина (для string)
+    email?: boolean | string     // перевірка e-mail або своє повідомлення
+  }
+}`}</pre>
+            </li>
+            <li>
+              <b>{`<Form form onSubmit />`}</b> — обгортка для тегу{" "}
+              <code>form</code> та підключає handleSubmit.
+            </li>
+            <li>
+              <b>&lt;InputField /&gt;</b> — текстові/email/number:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>type?</b>,{" "}
+                  <b>placeholder?</b>, <b>className?</b>
+                </li>
+                <li>Підсвічує помилку</li>
+              </ul>
+            </li>
+            <li>
+              <b>&lt;CheckboxField /&gt;</b> — булеве поле:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>className?</b>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b>&lt;RadioGroupField /&gt;</b> — вибір з опцій:
+              <ul className="list-disc pl-5">
+                <li>
+                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>options</b>
+                  <b>className?</b>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </Usage>
+      </Section>
+    </ShowcaseLayout>
   );
 };
 

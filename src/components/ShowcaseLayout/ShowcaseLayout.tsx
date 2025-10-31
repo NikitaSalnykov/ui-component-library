@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { VariantGrid } from '../VariantGrid';
-import { Avatar } from '../Avatart';
-import { Badge } from '../Badge';
-import { Button } from '../Button';
-import logo from '../../../public/library.png'
+import React, { useEffect, useState } from "react";
+import { VariantGrid } from "../VariantGrid";
+import { Avatar } from "../Avatart";
+import { Badge } from "../Badge";
+import { Button } from "../Button";
+import logo from "../../../public/library.png";
 
 export interface NavItem {
   id: string;
   label: string;
   disabled?: boolean;
   type: string;
+  contentUsage?: React.ReactNode;
 }
 
 interface Props {
@@ -19,7 +20,13 @@ interface Props {
 
 type NavType = "init" | "base" | "display" | "feedback" | "complex";
 
-const TYPE_GROUP: NavType[] = ["init", "base", "display", "feedback", "complex"];
+const TYPE_GROUP: NavType[] = [
+  "init",
+  "base",
+  "display",
+  "feedback",
+  "complex",
+];
 
 const TYPE_LABEL: Record<NavType, string> = {
   init: "Start",
@@ -30,13 +37,13 @@ const TYPE_LABEL: Record<NavType, string> = {
 };
 
 export const ShowcaseLayout: React.FC<Props> = ({ nav, children }) => {
-  const [activeId, setActiveId] = useState<string>(nav[0]?.id || '');
+  const [activeId, setActiveId] = useState<string>(nav[0]?.id || "");
 
   const handleClick = (id: string) => {
     setActiveId(id);
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -44,13 +51,15 @@ export const ShowcaseLayout: React.FC<Props> = ({ nav, children }) => {
     <div className="container">
       <header className="mb-6">
         <VariantGrid className="items-center gap-2 justify-center text-center md:justify-start md:text-start">
-          <div >
-<div className="flex gap-1 items-center">
-<div className='w-6 md:w-8'><img src={logo}/></div>
-            <h1 className="text-3xl font-semibold">UI Library - Showcase</h1>
-</div>
+          <div>
+            <div className="flex gap-1 items-center">
+              <div className="w-6 md:w-8">
+                <img src={logo} />
+              </div>
+              <h1 className="text-3xl font-semibold">UI Library - Showcase</h1>
+            </div>
             <div className=" flex gap-2  justify-center md:justify-start">
-              <p className="text-sm text-gray-600">Бібліотека компонентів</p>{' '}
+              <p className="text-sm text-gray-600">Бібліотека компонентів</p>{" "}
               <Badge variant="primary">beta</Badge>
             </div>
           </div>
@@ -80,43 +89,57 @@ export const ShowcaseLayout: React.FC<Props> = ({ nav, children }) => {
       <div className="flex gap-6 flex-col md:flex-row items-start ">
         <aside className="md:sticky top-4 w-full md:w-48">
           <nav className="bg-white rounded-lg shadow-sm p-4">
-            {TYPE_GROUP.map(((type) => {
-          return(<>
-                      <div className={TYPE_GROUP[0] !== type ? "px-2 pt-4 text-xs font-semibold uppercase text-gray-500" : "px-2 text-xs font-semibold uppercase text-gray-500"}>
-              {TYPE_LABEL[type]}
-            </div>
-            <ul className="space-y-2 mt-2">
-              {nav.filter(item => item.type === type).map((item) => {
-                const isActive = activeId === item.id;
-                return (
-                  <li key={item.id}>
-                    <Button
-                      variant="secondary"
-                      disabled={item.disabled}
-                      onClick={() => handleClick(item.id)}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`block w-full text-left px-2 py-1 rounded text-sm transition uppercase ${
-                        isActive
-                          ? "bg-indigo-500 text-gray-100 hover:bg-indigo-400 active:bg-indigo-300 text-white"
-                          : "bg-gray-100 hover:bg-gray-200 "
-                      }`}
-                    >
-                      {!item.disabled ? (
-                        <span>{item.label}</span>
-                      ) : (
-                        <span className="flex items-center justify-start gap-2">
-                          <span>{item.label}</span>
-                          <Badge variant="warning" className="text-[10px]">soon</Badge>
-                        </span>
-                      )}
-                    </Button>
-                  </li>
-                );
-              })}
-            </ul>
-          </>)
-            }))}
-
+            {TYPE_GROUP.map((type) => {
+              return (
+                <>
+                  <div
+                    className={
+                      TYPE_GROUP[0] !== type
+                        ? "px-2 pt-4 text-xs font-semibold uppercase text-gray-500"
+                        : "px-2 text-xs font-semibold uppercase text-gray-500"
+                    }
+                  >
+                    {TYPE_LABEL[type]}
+                  </div>
+                  <ul className="space-y-2 mt-2">
+                    {nav
+                      .filter((item) => item.type === type)
+                      .map((item) => {
+                        const isActive = activeId === item.id;
+                        return (
+                          <li key={item.id}>
+                            <Button
+                              variant="secondary"
+                              disabled={item.disabled}
+                              onClick={() => handleClick(item.id)}
+                              aria-current={isActive ? "page" : undefined}
+                              className={`block w-full text-left px-2 py-1 rounded text-sm transition uppercase ${
+                                isActive
+                                  ? "bg-indigo-500 text-gray-100 hover:bg-indigo-400 active:bg-indigo-300 text-white"
+                                  : "bg-gray-100 hover:bg-gray-200 "
+                              }`}
+                            >
+                              {!item.disabled ? (
+                                <span>{item.label}</span>
+                              ) : (
+                                <span className="flex items-center justify-start gap-2">
+                                  <span>{item.label}</span>
+                                  <Badge
+                                    variant="warning"
+                                    className="text-[10px]"
+                                  >
+                                    soon
+                                  </Badge>
+                                </span>
+                              )}
+                            </Button>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </>
+              );
+            })}
           </nav>
         </aside>
         <main className="space-y-6 md:w-[80%] ">{children}</main>

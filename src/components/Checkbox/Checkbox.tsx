@@ -18,7 +18,6 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     const mixed = indeterminate && !checked;
 
-
     useEffect(() => {
       if (internalRef.current) {
         internalRef.current.indeterminate = !!indeterminate;
@@ -35,15 +34,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <span className="relative inline-flex items-center justify-center h-5 w-5">
           <input
-            ref={(node) => {
-              if (!node) return;
-              internalRef.current = node;
-              if (typeof ref === "function") ref(node);
-              else if (ref)
-                (
-                  ref as React.MutableRefObject<HTMLInputElement | null>
-                ).current = node;
-            }}
+            ref={internalRef}
             type="checkbox"
             className={clsx(
               "appearance-none h-5 w-5 rounded border",
@@ -56,7 +47,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             onChange={(e) => onChange?.(e.target.checked, e)}
             {...rest}
           />
-          {checked && !mixed  && (
+          {checked && !mixed && (
             <svg
               className="pointer-events-none absolute h-3.5 w-3.5 text-white"
               viewBox="0 0 20 20"
@@ -71,7 +62,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               />
             </svg>
           )}
-          {mixed  && (
+          {mixed && (
             <span className="pointer-events-none absolute h-0.5 w-2 bg-white rounded-sm"></span>
           )}
         </span>
