@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { VariantGrid } from "../VariantGrid";
+import { VariantGrid } from "@/components/VariantGrid";
 import { Avatar } from "../Avatart";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
-import logo from "../../../public/library.png";
+import logo from "@/assets/library.png";
 
 export interface NavItem {
   id: string;
@@ -91,7 +91,7 @@ export const ShowcaseLayout: React.FC<Props> = ({ nav, children }) => {
           <nav className="bg-white rounded-lg shadow-sm p-4">
             {TYPE_GROUP.map((type) => {
               return (
-                <>
+                <div key={type}>
                   <div
                     className={
                       TYPE_GROUP[0] !== type
@@ -137,7 +137,7 @@ export const ShowcaseLayout: React.FC<Props> = ({ nav, children }) => {
                         );
                       })}
                   </ul>
-                </>
+                </div>
               );
             })}
           </nav>

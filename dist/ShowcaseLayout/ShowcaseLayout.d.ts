@@ -1,14 +1,15 @@
 import { default as React } from 'react';
 
-interface NavItem {
+export interface NavItem {
     id: string;
     label: string;
+    disabled?: boolean;
+    type: string;
+    contentUsage?: React.ReactNode;
 }
 interface Props {
-    title: string;
-    subtitle?: string;
     nav: NavItem[];
     children: React.ReactNode;
 }
-declare const ShowcaseLayout: React.FC<Props>;
+export declare const ShowcaseLayout: React.FC<Props>;
 export default ShowcaseLayout;

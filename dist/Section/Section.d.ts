@@ -1,10 +1,16 @@
 import { default as React } from 'react';
 
-interface Props {
-    id: string;
+interface PropsSectionContainer {
     title: string;
     description?: string;
     children: React.ReactNode;
+    className?: string;
 }
-declare const Section: React.FC<Props>;
-export default Section;
+interface PropsSection {
+    id: string;
+    children: React.ReactNode;
+    className?: string;
+}
+export declare const Section: React.FC<PropsSection>;
+export declare const SectionContainer: React.FC<PropsSectionContainer>;
+export {};

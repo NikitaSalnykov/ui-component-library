@@ -1,6 +1,6 @@
 import { default as React } from 'react';
 
-declare const Card: React.FC<{
+export declare const Card: React.FC<{
     title: string;
     children: React.ReactNode;
 }>;

@@ -58,14 +58,15 @@ export function useForm<TValues extends FieldValues>(
       if (r.required) {
         const msg =
           typeof r.required === 'string' ? r.required : 'Це поле обовʼязкове';
+      
         const empty =
           value === undefined ||
           value === null ||
           (typeof value === 'string' && value.trim() === '') ||
           (Array.isArray(value) && value.length === 0) ||
-          (typeof value === 'boolean' &&
-            value === false &&
-            r.required === true);
+          // 🔧 ключевая правка — убрали "&& r.required === true"
+          (typeof value === 'boolean' && value === false);
+      
         if (empty) {
           (nextErrors as Record<string, string>)[key] = msg;
           continue;

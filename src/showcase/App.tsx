@@ -1,61 +1,31 @@
-import React from "react";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-import { Checkbox } from "../components/Checkbox";
-import { Radio, RadioGroup } from "../components/Radio";
-import "../index.css";
-
+import React, { useState } from 'react';
+import { Button } from '../components/Button';
+import '../index.css';
+import AvatarShowcase from './demos/AvatarShowcase';
+import BadgeShowcase from './demos/BadgeShowcase';
+import ModalShowcase from './demos/ModalShowcase';
+import CheckboxShowcase from './demos/CheckboxShowcase';
+import ToastShowcase from './demos/ToastShowcase';
+import RadioShowcase from './demos/RadioShowcase';
+import InputShowcase from './demos/InputShowcase';
+import TabsShowcase from './demos/TabsShowcase';
+import FormShowcase from './demos/FormShowcase';
 import ShowcaseLayout, {
   NavItem,
-} from "../components/ShowcaseLayout/ShowcaseLayout";
-
-import VariantGrid from "../components/VariantGrid/VariantGrid";
-import Card from "../components/Card/Card";
-import { Badge } from "../components/Badge";
-import { Avatar } from "../components/Avatart";
-import { Tabs } from "../components/Tabs";
-import { useToast } from "../components/Toast";
-import { Modal } from "../components/Modal";
-import { Form, useForm } from "../components/Form/Form";
-import {
-  CheckboxField,
-  InputField,
-  RadioGroupField,
-} from "../components/Form/FormFields";
-import { SectionContainer, Section } from "../components/Section/Section";
-import Usage from "../components/Section/Usage";
+} from '../components/ShowcaseLayout/ShowcaseLayout';
+import { Badge } from '../components/Badge';
+import { Tabs } from '../components/Tabs';
+import { useToast } from '../components/Toast';
+import { SectionContainer, Section } from '../components/Section/Section';
+import Usage from '../components/Section/Usage';
+import { ButtonShowcase } from './demos/ButtonShowcase';
+import { SelectShowcase } from './demos/SelectShowcase';
 
 interface ShowCaseContainerProps {
   preview: React.ReactNode;
   code: string;
-  initial: "code" | "preview";
+  initial: 'code' | 'preview';
 }
-
-interface CodeBlockProps {
-  code: string;
-}
-
-type ProfileForm = {
-  fullName: string;
-  email: string;
-  role: string;
-  agree: boolean;
-  skills: string[];
-};
-
-const initial: ProfileForm = {
-  fullName: "",
-  email: "",
-  role: "user",
-  agree: false,
-  skills: [],
-};
-
-const rules = {
-  fullName: { required: true, minLen: 2 },
-  email: { required: true, email: true },
-  agree: { required: "Підтвердіть згоду" },
-};
 
 const codes: Record<string, string> = {
   button: `<VariantGrid>
@@ -80,6 +50,25 @@ const codes: Record<string, string> = {
     </div>
   </Card>
 </VariantGrid>`,
+  select: `<VariantGrid>
+<Card title={'Вибір одного варіанту'}>
+  <Select
+    options={options}
+    value={role}
+    onChange={setRole}
+    placeholder="Choose role"
+  />
+</Card>
+<Card title="Мульті вибір">
+  <Select
+    options={options}
+    value={tags}
+    onChange={setTags}
+    multiple
+    placeholder="Choose many"
+  />
+</Card>
+</VariantGrid>`,
   inputs: `    <VariantGrid>
 <Card title="Basic">
   <div className="space-y-4 max-w-sm">
@@ -102,7 +91,7 @@ const codes: Record<string, string> = {
   <div className="space-y-4 max-w-sm">
     <Input label="Small" inputSize="sm" placeholder="Small input" />
     <Input
-      label="Medium (default)"
+      label="Medium (По-замочуванню)"
       inputSize="md"
       placeholder="Medium input"
     />
@@ -159,7 +148,7 @@ const codes: Record<string, string> = {
   </RadioGroup>
 </Card>
 <Card title="Uncontrolled">
-  <RadioGroup label="uncontrolled" name="uncontrolled" defaultValue="x">
+  <RadioGroup label="uncontrolled" name="uncontrolled" По-замочуваннюValue="x">
     <Radio value="x" label="Choice X" />
     <Radio value="y" label="Choice Y" />
     <Radio value="z" label="Choice Z" />
@@ -233,7 +222,7 @@ const codes: Record<string, string> = {
   </div>
 </Card>
 </VariantGrid>`,
-  tabs: `<Tabs.Root defaultValue="profile">
+  tabs: `<Tabs.Root По-замочуваннюValue="profile">
         <Tabs.List>
           <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
           <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
@@ -356,95 +345,7 @@ retun(
 )`,
 };
 
-const FormShowcase: React.FC = () => {
-  const form = useForm<ProfileForm>(initial, rules);
-  const { success } = useToast();
-  const submit = (vals: ProfileForm) => {
-    console.log("submit:", vals);
-    success(`${form.values.fullName}! Account create!`);
-    form.reset(initial);
-  };
-
-  return (
-    <div className="max-w-[350px]">
-      <Form
-        form={form}
-        onSubmit={submit}
-        className="space-y-4 p-4 bg-slate-100 border-slate-300 border rounded-xl"
-      >
-        <InputField
-          form={form}
-          name="fullName"
-          label="Повне імʼя"
-          placeholder="Іван Петренко"
-        />
-        <InputField
-          form={form}
-          name="email"
-          label="Email"
-          type="email"
-          placeholder="name@example.codm"
-        />
-
-        <RadioGroupField
-          form={form}
-          name="role"
-          label="Роль"
-          options={[
-            { label: "Користувач", value: "user" },
-            { label: "Модератор", value: "moderator" },
-            { label: "Адмін", value: "admin" },
-          ]}
-        />
-
-        <div className="flex gap-2 items-center">
-          <CheckboxField form={form} name="agree" />
-          Погоджуюсь з умовами
-        </div>
-
-        <div className="pt-2 flex gap-2 justify-center">
-          <Button type="submit" variant="primary">
-            Надіслати
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => form.reset(initial)}
-          >
-            Скинути
-          </Button>
-        </div>
-      </Form>
-    </div>
-  );
-};
-
-const TabsShowcase: React.FC = () => {
-  return (
-    <Tabs.Root defaultValue="profile">
-      <Tabs.List>
-        <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
-        <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
-        <Tabs.Trigger value="security" disabled>
-          Security
-        </Tabs.Trigger>
-      </Tabs.List>
-
-      <Tabs.Content value="profile">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rem nihil,
-        ipsa, similique suscipit voluptatum reiciendis mollitia nobis quidem
-        modi beatae ratione iste, perspiciatis delectus quisquam.
-      </Tabs.Content>
-      <Tabs.Content value="settings">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque dolore
-        distinctio optio consequatur iste reprehenderit?
-      </Tabs.Content>
-      <Tabs.Content value="security">Lorem ipsum dolor sit amet.</Tabs.Content>
-    </Tabs.Root>
-  );
-};
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
+const CodeBlock: React.FC<{ code: string }> = ({ code }) => {
   const { success, error, info, warning, show } = useToast();
 
   const handleCopy = async () => {
@@ -457,7 +358,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
         </div>
       );
     } catch (err) {
-      error("Error");
+      error('Error');
     }
   };
 
@@ -466,7 +367,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => {
       <Button
         variant="outline"
         onClick={handleCopy}
-        className="absolute right-3 top-3 bg-slate-50"
+        className="absolute right-3 top-3 bg-stone-100"
         size="sm"
       >
         Copy
@@ -497,599 +398,25 @@ const ShowcaseContainer: React.FC<ShowCaseContainerProps> = ({
   );
 };
 
-const ButtonPreview: React.FC = () => {
-  return (
-    <VariantGrid>
-      <Card title="Basic">
-        <div className="flex gap-3 flex-wrap items-center">
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="ghost">Ghost</Button>
-        </div>
-      </Card>
-      <Card title="Sizes/States">
-        <div className="flex gap-3 flex-wrap items-center">
-          <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
-          <Button size="lg">Large</Button>
-        </div>
-        <div className="flex gap-3 flex-wrap items-center">
-          <Button loading>Loading</Button>
-          <Button disabled>Disabled</Button>
-        </div>
-      </Card>
-    </VariantGrid>
-  );
-};
-
-const InputShowcase: React.FC = () => {
-  return (
-    <VariantGrid>
-      <Card title="Basic">
-        <div className="space-y-4 max-w-sm">
-          <Input label="Your name" placeholder="Type your name" />
-          <Input
-            type="email"
-            label="Email"
-            placeholder="name@example.com"
-            helperText="We'll never share your email."
-          />
-          <Input
-            type="password"
-            label="Password"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-      </Card>
-      <Card title="Sizes/States">
-        <div className="space-y-4 max-w-sm">
-          <Input label="Small" inputSize="sm" placeholder="Small input" />
-          <Input
-            label="Medium (default)"
-            inputSize="md"
-            placeholder="Medium input"
-          />
-          <Input label="Large" inputSize="lg" placeholder="Large input" />
-          <Input
-            label="With error"
-            placeholder="Invalid value"
-            error="This value is not valid"
-          />
-          <Input
-            label="Disabled"
-            placeholder="Can't type here"
-            disabled
-            helperText="Field is disabled"
-          />
-        </div>
-      </Card>
-    </VariantGrid>
-  );
-};
-
-const RadioShowcase: React.FC = () => {
-  const [val, setVal] = React.useState("b");
-  return (
-    <VariantGrid>
-      <Card title="Basic group">
-        <RadioGroup
-          label="controlled"
-          name="controlled"
-          value={val}
-          onChange={setVal}
-        >
-          <Radio value="a" label="Option A" />
-          <Radio value="b" label="Option B" />
-          <Radio value="c" label="Option C" disabled />
-        </RadioGroup>
-      </Card>
-      <Card title="Uncontrolled">
-        <RadioGroup label="uncontrolled" name="uncontrolled" defaultValue="x">
-          <Radio value="x" label="Choice X" />
-          <Radio value="y" label="Choice Y" />
-          <Radio value="z" label="Choice Z" />
-        </RadioGroup>
-      </Card>
-    </VariantGrid>
-  );
-};
-
-const ToastShowcase: React.FC = () => {
-  const { success, error, info, warning, show } = useToast();
-  return (
-    <div className="flex flex-wrap gap-2">
-      <Button
-        className="bg-green-800 hover:bg-green-600 active:bg-green-300"
-        onClick={() => success("Saved!")}
-      >
-        Success
-      </Button>
-      <Button
-        className="bg-red-700 hover:bg-red-600 active:bg-red-300"
-        onClick={() => error("Oops…")}
-      >
-        Error
-      </Button>
-      <Button
-        className="bg-blue-600 hover:bg-blue-400 active:bg-blue-300"
-        onClick={() => info("Bla-bla-bla")}
-      >
-        Info
-      </Button>
-      <Button
-        className="bg-yellow-600 hover:bg-yellow-400 active:bg-yellow-200"
-        onClick={() => warning("Be careful")}
-      >
-        Warning
-      </Button>
-      <Button
-        className="bg-purple-600 hover:bg-purple-400 active:bg-purple-300"
-        onClick={() =>
-          show({
-            message: <p>Custome massege 🫠</p>,
-            duration: 5000,
-            type: "info",
-            className: "text-white bg-purple-400",
-          })
-        }
-      >
-        Custom
-      </Button>
-    </div>
-  );
-};
-
-const CheckboxShowcase: React.FC = () => {
-  const [a, setA] = React.useState(true);
-  const [b, setB] = React.useState(false);
-  const [c, setC] = React.useState(true);
-  const [d, setD] = React.useState(false);
-
-  const childrenCheckedCount = (c ? 1 : 0) + (d ? 1 : 0);
-  const parentChecked = childrenCheckedCount === 2;
-  const parentIndeterminate =
-    childrenCheckedCount > 0 && childrenCheckedCount < 2;
-
-  const handleParentChange = (next: boolean) => {
-    setC(next);
-    setD(next);
-  };
-  return (
-    <VariantGrid>
-      <Card title="Basic">
-        <div className="flex flex-col gap-3">
-          <Checkbox label="Checked" checked={a} onChange={setA} />
-          <Checkbox label="Unchecked" checked={b} onChange={setB} />
-          <Checkbox label="Disabled" disabled checked />
-        </div>
-      </Card>
-
-      <Card title="Indeterminate">
-        <div className="flex flex-col gap-3">
-          <Checkbox
-            label="Select all"
-            checked={parentChecked}
-            indeterminate={parentIndeterminate}
-            onChange={handleParentChange}
-          />
-          <div className="pl-6 flex flex-col gap-2">
-            <Checkbox label="Child C" checked={c} onChange={setC} />
-            <Checkbox label="Child D" checked={d} onChange={setD} />
-          </div>
-        </div>
-      </Card>
-    </VariantGrid>
-  );
-};
-
-const ModalShowcase: React.FC = () => {
-  const [openBase, setOpenBase] = React.useState(false);
-  const [openDark, setOpenDark] = React.useState(false);
-  const [openGlass, setOpenGlass] = React.useState(false);
-  const [openRed, setOpenRed] = React.useState(false);
-  const [openGreen, setOpenGreen] = React.useState(false);
-  const [openBlue, setOpenBlue] = React.useState(false);
-  const [openViolet, setOpenViolet] = React.useState(false);
-  const [openGray, setOpenGray] = React.useState(false);
-  //в модалке
-  const [email, setEmail] = React.useState("");
-  const [pwd, setPwd] = React.useState("");
-  const [optA, setOptA] = React.useState(true);
-  const [optB, setOptB] = React.useState(false);
-  const [choice, setChoice] = React.useState("b");
-
-  return (
-    <>
-      <VariantGrid className="flex flex-wrap gap-2">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setOpenBase(true)}
-            className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
-          >
-            Base
-          </button>
-          <button
-            onClick={() => setOpenDark(true)}
-            className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800"
-          >
-            Dark
-          </button>
-          <button
-            onClick={() => setOpenGlass(true)}
-            className="px-4 py-2 rounded-md bg-white/40 backdrop-blur-md border border-white/50"
-          >
-            Glass
-          </button>
-          <button
-            onClick={() => setOpenGray(true)}
-            className="px-4 py-2 rounded-md bg-gray-400 text-white hover:bg-gray-500"
-          >
-            Gray
-          </button>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setOpenRed(true)}
-            className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
-          >
-            Red
-          </button>
-          <button
-            onClick={() => setOpenGreen(true)}
-            className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
-          >
-            Green
-          </button>
-          <button
-            onClick={() => setOpenBlue(true)}
-            className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
-          >
-            Blue
-          </button>
-          <button
-            onClick={() => setOpenViolet(true)}
-            className="px-4 py-2 rounded-md bg-violet-600 text-white hover:bg-violet-700"
-          >
-            Violet
-          </button>
-        </div>
-      </VariantGrid>
-
-      {/* Base */}
-      <Modal
-        open={openBase}
-        onClose={() => setOpenBase(false)}
-        title="Швидка дія"
-        style="base"
-      >
-        <p className="text-sm text-gray-700">Підтвердити виконання дії?</p>
-        <div className="mt-4 flex gap-2">
-          <Button variant="outline" onClick={() => setOpenBase(false)}>
-            Скасувати
-          </Button>
-          <Button variant="primary" onClick={() => setOpenBase(false)}>
-            Підтвердити
-          </Button>
-        </div>
-      </Modal>
-
-      {/* Dark */}
-      <Modal
-        open={openDark}
-        onClose={() => setOpenDark(false)}
-        title="Вхід"
-        style="dark"
-      >
-        <div className="space-y-3">
-          <Input
-            type="email"
-            label="Email"
-            placeholder="name@example.com"
-            value={email}
-            onChange={(v) => setEmail(v.toString())}
-          />
-          <Input
-            type="password"
-            label="Пароль"
-            placeholder="••••••••"
-            value={pwd}
-            onChange={(v) => setPwd(v.toString())}
-          />
-          <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setOpenDark(false)}>
-              Закрити
-            </Button>
-            <Button variant="primary" onClick={() => setOpenDark(false)}>
-              Увійти
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Glass */}
-      <Modal
-        open={openGlass}
-        onClose={() => setOpenGlass(false)}
-        title="Опції"
-        style="glass"
-      >
-        <div className="space-y-3">
-          <div className="flex flex-col gap-2">
-            <Checkbox label="Опція A" checked={optA} onChange={setOptA} />
-            <Checkbox label="Опція B" checked={optB} onChange={setOptB} />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpenGlass(false)}>
-              Скасувати
-            </Button>
-            <Button variant="primary" onClick={() => setOpenGlass(false)}>
-              Застосувати
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Gray */}
-      <Modal
-        open={openGray}
-        onClose={() => setOpenGray(false)}
-        title="Вибір режиму"
-        style="gray"
-      >
-        <div className="space-y-3">
-          <RadioGroup
-            label="Режим"
-            name="mode"
-            value={choice}
-            onChange={setChoice}
-          >
-            <Radio value="a" label="Легкий" />
-            <Radio value="b" label="Звичний" />
-            <Radio value="c" label="Складний" />
-          </RadioGroup>
-          <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenGray(false)}>
-              OK
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Red */}
-      <Modal
-        open={openRed}
-        onClose={() => setOpenRed(false)}
-        title="Видалення"
-        style="red"
-      >
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Badge variant="danger">Увага</Badge>
-            <p className="text-sm">
-              Ця дія незворотньо видалить профіль. Продовжити?
-            </p>
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpenRed(false)}>
-              Скасувати
-            </Button>
-            <Button
-              variant="ghost"
-              className="bg-rose-700 text-white hover:bg-red-700"
-              onClick={() => setOpenRed(false)}
-            >
-              Видалити
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Green */}
-      <Modal
-        open={openGreen}
-        onClose={() => setOpenGreen(false)}
-        title="Готово"
-        style="green"
-      >
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Badge variant="success">Успіх</Badge>
-            <p className="text-sm">Налаштування збережено.</p>
-          </div>
-          <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenGreen(false)}>
-              OK
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Blue */}
-      <Modal
-        open={openBlue}
-        onClose={() => setOpenBlue(false)}
-        title="Інформація"
-        style="blue"
-      >
-        <div className="space-y-3">
-          <p className="text-sm">Доступне оновлення</p>
-          <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setOpenBlue(false)}>
-              Пізніше
-            </Button>
-            <Button variant="primary" onClick={() => setOpenBlue(false)}>
-              Оновити
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Violet */}
-      <Modal
-        open={openViolet}
-        onClose={() => setOpenViolet(false)}
-        title="Деталі"
-        style="violet"
-      >
-        <div className="space-y-3">
-          <Tabs.Root defaultValue="about">
-            <Tabs.List>
-              <Tabs.Trigger value="about">Про</Tabs.Trigger>
-              <Tabs.Trigger value="help">Допомога</Tabs.Trigger>
-            </Tabs.List>
-            <Tabs.Content value="about">
-              <p className="text-sm">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste
-                quia ab reiciendis neque deleniti mollitia accusantium alias,
-                dolore provident dignissimos.
-              </p>
-            </Tabs.Content>
-            <Tabs.Content value="help">
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Ducimus, nobis omnis. Obcaecati, ipsum molestiae!
-              </p>
-            </Tabs.Content>
-          </Tabs.Root>
-          <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setOpenViolet(false)}>
-              Зрозуміло
-            </Button>
-          </div>
-        </div>
-      </Modal>
-    </>
-  );
-};
-
-const BadgeShowcase: React.FC = () => {
-  return (
-    <VariantGrid>
-      <div>
-        <p className="text-sm text-gray-600 mb-2">Variants (solid)</p>
-        <div className="flex flex-wrap gap-2 items-center">
-          <Badge variant="neutral">Neutral</Badge>
-          <Badge variant="primary">Primary</Badge>
-          <Badge variant="success">Success</Badge>
-          <Badge variant="warning">Warning</Badge>
-          <Badge variant="danger">Danger</Badge>
-        </div>
-      </div>
-      <div>
-        <p className="text-sm text-gray-600 mb-2">Soft / Sizes / Dot</p>
-        <div className="flex flex-wrap gap-2 items-center">
-          <Badge soft size="sm" variant="primary" dot>
-            New (1)
-          </Badge>
-          <Badge soft size="md" variant="success" rounded="full" dot>
-            Online
-          </Badge>
-          <Badge
-            soft
-            size="md"
-            variant="neutral"
-            rounded="full"
-            dot
-            className="opacity-60"
-          >
-            Offline
-          </Badge>
-          <Badge soft size="md" variant="warning" className=" animate-pulse">
-            Pending
-          </Badge>
-          <Badge soft size="sm" variant="danger">
-            Error
-          </Badge>
-        </div>
-      </div>
-    </VariantGrid>
-  );
-};
-
-const AvatarShowcase: React.FC = () => {
-  return (
-    <VariantGrid>
-      <Card title="Basic / Sizes">
-        <div className="flex flex-wrap items-center gap-4">
-          <Avatar name="Nikita Salnykov" size="sm" />
-          <Avatar name="Nikita Salnykov" size="md" />
-          <Avatar name="Nikita Salnykov" size="lg" />
-          <Avatar name="Nikita Salnykov" size="xl" />
-        </div>
-      </Card>
-
-      <Card title="Image / Fallback / Shadow">
-        <div className="flex flex-wrap items-center gap-4">
-          <Avatar
-            src="https://avatars.githubusercontent.com/u/121830017?v=4"
-            size="xl"
-            alt="User A"
-          />
-          <Avatar
-            src="https://avatars.githubusercontent.com/u/121830017?v=4"
-            name="Fallback"
-            showFallback
-          />
-          <Avatar
-            src="https://avatars.githubusercontent.com/u/121830017?v=4"
-            showFallback
-            withShadow
-            size="sm"
-          />
-        </div>
-      </Card>
-
-      <Card title="Rounded / Status">
-        <div className="flex flex-wrap items-center gap-6">
-          <Avatar name="Square" rounded="none" status="online" />
-          <Avatar name="Rounded" rounded="md" status="busy" />
-          <Avatar
-            name="Circle 1"
-            rounded="full"
-            status="away"
-            className="bg-red-500 text-white"
-          />
-          <Avatar
-            name="Circle 2"
-            rounded="full"
-            status="offline"
-            className="bg-green-700 text-white"
-          />
-          <Avatar
-            name="Circle 3"
-            rounded="full"
-            status="none"
-            className="bg-yellow-500 text-white"
-          />
-        </div>
-      </Card>
-    </VariantGrid>
-  );
-};
-
 const App: React.FC = () => {
   const nav: NavItem[] = [
-    { id: "init", label: "Встановлення", type: "init" },
-    { id: "usage", label: "Використ.", type: "init", disabled: true },
+    { id: 'init', label: 'Встановлення', type: 'init' },
 
-    { id: "buttons", label: "Button", type: "base" },
-    { id: "inputs", label: "Input", type: "base" },
-    { id: "checkboxes", label: "Checkbox", type: "base" },
-    { id: "radios", label: "Radio", type: "base" },
-    { id: "select", label: "Select", type: "base", disabled: true },
+    { id: 'buttons', label: 'Button', type: 'base' },
+    { id: 'inputs', label: 'Input', type: 'base' },
+    { id: 'checkboxes', label: 'Checkbox', type: 'base' },
+    { id: 'radios', label: 'Radio', type: 'base' },
+    { id: 'select', label: 'Select', type: 'base' },
 
-    { id: "badges", label: "Badge", type: "display" },
-    { id: "avatars", label: "Avatar", type: "display" },
-    { id: "dropdown", label: "Dropdown", type: "display", disabled: true },
-    { id: "accordion", label: "Accordion", type: "display", disabled: true },
+    { id: 'badges', label: 'Badge', type: 'display' },
+    { id: 'avatars', label: 'Avatar', type: 'display' },
 
-    { id: "tabs", label: "Tabs", type: "feedback" },
-    { id: "toast", label: "Toast", type: "feedback" },
-    { id: "modal", label: "Modal", type: "feedback" },
 
-    { id: "form", label: "Form", type: "complex" },
+    { id: 'tabs', label: 'Tabs', type: 'feedback' },
+    { id: 'toast', label: 'Toast', type: 'feedback' },
+    { id: 'modal', label: 'Modal', type: 'feedback' },
+
+    { id: 'form', label: 'Form', type: 'complex' },
   ];
 
   return (
@@ -1106,14 +433,33 @@ const App: React.FC = () => {
           <CodeBlock code="npm install github:NikitaSalnykov/ui-component-library" />
           <p>yarn:</p>
           <CodeBlock code="yarn install github:NikitaSalnykov/ui-component-library" />
+
           <div className="flex flex-col gap-1">
-            <strong>2. Імпортуй стилі у проєкт</strong>
+            <strong>2. Встанови необхідні залежності</strong>
+            <CodeBlock code="npm install react react-dom clsx tailwindcss" />
             <i className="text-xs">
-              Для стилізації використовується виключно Tailwind
+              Для стилізації використовується виключно Tailwind CSS - він має
+              бути налаштований у вашому проєкті.
             </i>
           </div>
-          <CodeBlock code={`import "ui-component-library/dist/style.css"`} />
-          <strong>3. Імпортуй компоненти бібліотеки (приклад):</strong>
+
+          <div className="flex flex-col gap-1">
+            <strong>3. Додай бібліотеку у Tailwind config</strong>
+            <CodeBlock
+              code={`content: [
+  "./index.html",
+  "./src/**/*.{js,ts,jsx,tsx}",
+  "./node_modules/ui-component-library/dist/**/*.{js,mjs}"
+],`}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <strong>4. Імпортуй стилі у проєкт</strong>
+            <CodeBlock code={`import "ui-component-library/dist/style.css"`} />
+          </div>
+
+          <strong>5. Імпортуй компоненти бібліотеки (приклад):</strong>
           <CodeBlock
             code={`import {
   Button,
@@ -1133,32 +479,59 @@ const App: React.FC = () => {
           description="Кнопки з варіантами, розмірами та станами."
         >
           <ShowcaseContainer
-            preview={<ButtonPreview />}
+            preview={<ButtonShowcase />}
             code={codes.button}
             initial="preview"
           />
         </SectionContainer>
 
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>label</b>: string — підпис над полем
-            </li>
-            <li>
-              <b>error</b>: string — текст помилки під полем
-            </li>
-            <li>
-              <b>containerClassName</b>, <b>className</b>: string — хуки для
-              стилів
-            </li>
-            <li>
-              <b>value</b>, <b>onChange</b> — керований режим
-            </li>
-            <li>
-              Успадковує всі нативні (напр. <b>type</b>, <b>placeholder</b>,{" "}
-              <b>required</b>, <b>disabled</b>)
-            </li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Кнопка для дій у формах та діалогах.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Button>Save</Button>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>variant</code> - <code>primary</code> |{' '}
+                  <code>secondary</code> | <code>outline</code> |{' '}
+                  <code>ghost</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>primary</code>
+                  </em>
+                </li>
+                <li>
+                  <code>size</code> - <code>sm</code> | <code>md</code> |{' '}
+                  <code>lg</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>md</code>
+                  </em>
+                </li>
+                <li>
+                  <code>loading</code> - показує стан завантаження (блокує
+                  клік).{' '}
+                  <em>
+                    По-замочуванню: <code>false</code>
+                  </em>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Варіації</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Button variant="secondary">Secondary</Button>
+<Button size="lg">Large</Button>
+<Button loading>Saving…</Button>`}</code>
+              </pre>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1175,27 +548,143 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <Usage>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>
-                <b>label</b>: string — підпис над полем
-              </li>
-              <li>
-                <b>helperText</b>: string — підказка під полем
-              </li>
-              <li>
-                <b>inputSize</b>: "sm" | "md" | "lg" - розмір
-              </li>
-              <li>
-                <b>containerClassName</b>, <b>className</b>: string - стилізація
-                контейнера/інпута
-              </li>
-              <li>
-                Успадковує всі нативні (напр. <b>value</b>, <b>onChange</b>,{" "}
-                <b>type</b>, <b>placeholder</b>, <b>required</b>)
-              </li>
-            </ul>
-          </Usage>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Текстове поле з лейблом та підказкою.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Input label="Email" placeholder="you@example.com" />`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>label</code> - текст мітки.
+                </li>
+                <li>
+                  <code>helperText</code> - підказка під полем.
+                </li>
+                <li>
+                  <code>error</code> - рядок помилки або <code>true</code> для
+                  стилю помилки.{' '}
+                  <em>
+                    По-замочуванню: <code>false</code>
+                  </em>
+                </li>
+                <li>
+                  <code>inputSize</code> - <code>sm</code> | <code>md</code> |{' '}
+                  <code>lg</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>md</code>
+                  </em>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Варіації</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Input label="Password" type="password" placeholder="••••••••" />
+<Input label="With error" error="Invalid value" />
+<Input label="Disabled" disabled />`}</code>
+              </pre>
+            </div>
+          </div>
+        </Usage>
+      </Section>
+
+      
+      {/* selec */}
+
+      <Section id="select">
+        <SectionContainer
+          title="Select"
+          description="Приклад форми з валідацією та керованими елементами."
+        >
+          <ShowcaseContainer
+            preview={<SelectShowcase />}
+            code={codes.select}
+            initial="preview"
+          />
+        </SectionContainer>
+        <Usage>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>
+                Компонент для вибору одного або декількох значень із випадаючого
+                списку. Підтримує пошук, multi-select і кастомний плейсхолдер.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const options = [
+  { label: "User", value: "user" },
+  { label: "Moderator", value: "moderator" },
+  { label: "Admin", value: "admin" },
+];
+
+// Single select
+const [role, setRole] = useState<string | null>(null);
+
+<Select
+  options={options}
+  value={role}
+  onChange={setRole}
+  placeholder="Choose role"
+/>
+
+// Multi select
+const [tags, setTags] = useState<string[]>([]);
+
+<Select
+  options={options}
+  value={tags}
+  onChange={setTags}
+  multiple
+  placeholder="Choose many"
+/>`}</code>
+              </pre>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>
+                  <code>options</code> - масив варіантів{' '}
+                  <code>{`{label, value}`}</code>. <em>Required</em>
+                </li>
+                <li>
+                  <code>value</code> - вибране значення рядок або масив рядків.{' '}
+                  <em>Required</em>
+                </li>
+                <li>
+                  <code>onChange(value)</code> - вибір значення.{' '}
+                  <em>Required</em>
+                </li>
+                <li>
+                  <code>multiple</code> - дозволяє вибір кількох елементів.
+                </li>
+                <li>
+                  <code>searchable</code> - вмикає пошук у списку
+                  (По-замочуванню: <code>true</code>).
+                </li>
+                <li>
+                  <code>placeholder</code> - текст для порожнього стану
+                  (підказка).
+                </li>
+                <li>
+                  <code>disabled</code> - блокує select.
+                </li>
+                <li>
+                  <code>className</code> - додаткові стилі.
+                </li>
+              </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1212,21 +701,43 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>label</b>: string - текст справа від чекбокса
-            </li>
-            <li>
-              <b>checked</b>: boolean - керований стан
-            </li>
-            <li>
-              <b>indeterminate</b>: boolean - «між» стан
-            </li>
-            <li>
-              <b>containerClassName</b>, <b>className</b>: string - стилізація
-              контейнера/інпута
-            </li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Перемикач так/ні, підтримує «змішаний» стан.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Checkbox label="I agree" />`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>label</code> - підпис поруч із чекбоксом.
+                </li>
+                <li>
+                  <code>checked</code> - контрольований стан (використовуйте з{' '}
+                  <code>onChange</code>). <em>Required при контрольованому</em>
+                </li>
+                <li>
+                  <code>indeterminate</code> - «змішаний» стан.
+                </li>
+                <li>
+                  <code>onChange(next)</code> - викликається при зміні.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Варіації</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Checkbox По-замочуваннюChecked label="Subscribe" />
+<Checkbox checked={ok} onChange={setOk} label="Accept terms" />
+<Checkbox indeterminate label="Select all" />`}</code>
+              </pre>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1243,39 +754,41 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>{`<RadioGroup>`}</b>:
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Вибір одного значення з кількох.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<RadioGroup name="plan" По-замочуваннюValue="basic">
+  <Radio value="basic" label="Basic" />
+  <Radio value="pro" label="Pro" />
+</RadioGroup>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
               <ul className="list-disc pl-5">
                 <li>
-                  <b>name</b>?: string - ім’я групи
+                  <code>Radio.value</code> - значення опції. <em>Required</em>
                 </li>
                 <li>
-                  <b>value</b>?: string - керований активний
+                  <code>Radio.label</code> - підпис опції.
                 </li>
                 <li>
-                  <b>label</b>?: string - aria-label для групи
+                  <code>RadioGroup.name</code> - ім’я групи (для форм).
                 </li>
                 <li>
-                  <b>className</b>?: string - стилізація обгортки
+                  <code>value</code> / <code>По-замочуваннюValue</code> -
+                  контрольований/неконтрольований режим.
+                </li>
+                <li>
+                  <code>onChange(value)</code> - зміна значення.
                 </li>
               </ul>
-            </li>
-            <li>
-              <b>{`<Radio>`}</b>:
-              <ul className="list-disc pl-5">
-                <li>
-                  <b>value</b>: string - значення опції (обов’язково)
-                </li>
-                <li>
-                  <b>label</b>?: string — текст праворуч
-                </li>
-                <li>
-                  <b>disabled</b>?: boolean
-                </li>
-              </ul>
-            </li>
-          </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1292,27 +805,41 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>variant</b>?: "neutral" | "primary" | "success" | "warning" |
-              "danger" (default "neutral")
-            </li>
-            <li>
-              <b>size</b>?: "sm" | "md" (default "sm")
-            </li>
-            <li>
-              <b>rounded</b>?: "md" | "full" (default "md")
-            </li>
-            <li>
-              <b>soft</b>?: boolean - м’якша палітра
-            </li>
-            <li>
-              <b>dot</b>?: boolean - точка-індикатор ліворуч
-            </li>
-            <li>
-              <b>className</b>: string - стилізація
-            </li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Маркер статусу або категорії.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Badge variant="primary">New</Badge>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>variant</code> -{' '}
+                  <code>neutral|primary|success|warning|danger</code>.
+                </li>
+                <li>
+                  <code>soft</code> - «м’який» стиль.
+                </li>
+                <li>
+                  <code>size</code> - <code>sm|md</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>md</code>
+                  </em>
+                </li>
+                <li>
+                  <code>rounded</code> - <code>full</code> для круглих бейджів.
+                </li>
+                <li>
+                  <code>dot</code> - крапка-індикатор.
+                </li>
+              </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1329,36 +856,48 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>src</b>?: string, <b>alt</b>?: string - джерело зображення та
-              alt
-            </li>
-            <li>
-              <b>name</b>?: string - використовується для ініціалів (fallback)
-            </li>
-            <li>
-              <b>size</b>?: "sm" | "md" | "lg" | "xl" (default "md") - розмір
-            </li>
-            <li>
-              <b>rounded</b>?: "none" | "md" | "full" (default "full") -
-              закруглення
-            </li>
-            <li>
-              <b>status</b>?: "none" | "online" | "offline" | "busy" | "away" -
-              крапка біля аватару
-            </li>
-            <li>
-              <b>withShadow</b>?: boolean — додає тінь
-            </li>
-            <li>
-              <b>showFallback</b>?: boolean - показ fallback’у (ігнопрє
-              зображення)
-            </li>
-            <li>
-              <b>className</b>?: string - стилізація
-            </li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Аватар користувача з ініціалами або зображенням.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Avatar name="Nikita Salnykov" />`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>src</code>/<code>alt</code> - зображення та
+                  альтернативний текст.
+                </li>
+                <li>
+                  <code>name</code> - для ініціалів (fallback).
+                </li>
+                <li>
+                  <code>size</code> - <code>sm|md|lg|xl</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>md</code>
+                  </em>
+                </li>
+                <li>
+                  <code>rounded</code> - <code>none|md|full</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>full</code>
+                  </em>
+                </li>
+                <li>
+                  <code>status</code> -{' '}
+                  <code>none|online|offline|busy|away</code>.{' '}
+                  <em>
+                    По-замочуванню: <code>none</code>
+                  </em>
+                </li>
+              </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1375,26 +914,41 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>Tabs.Root</b>: створює контекст, керує активною вкладкою{" "}
-              {`(defaultValue?: string - вкладка позамочуванню, className? - стилізація)`}
-            </li>
-            <li>
-              <b>Tabs.List</b>: контейнер кнопок{" "}
-              {`(className?: string - стилізація)`}
-            </li>
-            <li>
-              <b>Tabs.Trigger</b>: кнопка вкладки; підтримує клавіатуру
-              {`(value: string - має співпадати з value Tabs.Content для відкриття вкладки, disabled?: boolean - робе кнопку неактивною, className?: string - стилізація)`}{" "}
-              —
-            </li>
-            <li>
-              <b>Tabs.Content</b>:{" "}
-              {`(value: string - має співпадати з value Tabs.Trigger для відкриття вкладки, className?: string - стилізація)`}{" "}
-              — показується лише коли активна вкладка співпадає
-            </li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Перемикання секцій контенту.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`<Tabs.Root По-замочуваннюValue="profile">
+  <Tabs.List>
+    <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
+    <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="profile">...</Tabs.Content>
+  <Tabs.Content value="settings">...</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>Tabs.Trigger.value</code> - ідентифікатор вкладки.{' '}
+                  <em>Required</em>
+                </li>
+                <li>
+                  <code>Tabs.Content.value</code> - має збігатися з{' '}
+                  <code>Trigger.value</code>. <em>Required</em>
+                </li>
+                <li>
+                  <code>По-замочуваннюValue</code> - активна вкладка за
+                  замовчуванням.
+                </li>
+              </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1411,47 +965,65 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>{`<ToastProvider>`}</b>:
-              <i>
-                {" "}
-                Обгорни частину UI ({`Наприклад <App/>`}) у {`<ToastProvider>`}
-              </i>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Тимчасові повідомлення</p>
+            </div>
+            <h3 className="font-semibold mb-1">Quick start</h3>
+            <div className="">
+              <p className="font-semibold mb-1">
+                Обгорніть додаток у {`<ToastProvider>`}
+              </p>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const { success, error, info, warning, show } = useToast();
+
+<ToastProvider>
+  <App/>
+</ToastProvider>`}</code>
+              </pre>
+            </div>
+            <div className="">
+              <p className="font-semibold mb-1">
+                Використання хука {`useToast()`}
+              </p>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const { success, error, info, warning, show } = useToast();
+ 
+ <Button onClick={() => success("Saved!")}>Notify</Button>
+`}</code>
+              </pre>
+            </div>
+            <div>
+              <p className="font-semibold mb-1">Для кастомних тостів</p>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const { success, error, info, warning, show } = useToast();
+
+<ToastProvider>
+  <Button onClick={() =>
+    show({
+      message: <p>Custome massege 🫠</p>,
+      duration: 5000,
+      type: "info",
+      className: "text-white bg-purple-400",
+    })
+  }>Notify</Button>
+</ToastProvider>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Патерн</h3>
               <ul className="list-disc pl-5">
                 <li>
-                  <b>position</b>?: "top-right" | "top-left" | "bottom-right" |
-                  "bottom-left" (default "top-right") - позиція тостів
+                  Обгорніть додаток у <code>ToastProvider</code>.
                 </li>
                 <li>
-                  <b>max</b>?: number (default 3) - максимум одночасних тостів
-                </li>
-                <li>
-                  <b>duration</b>?: number (default 3000 мс) - час життя
+                  Викликайте <code>success</code>/<code>error</code>/
+                  <code>info</code>/<code>warning</code> або <code>show</code> у
+                  діях.
                 </li>
               </ul>
-            </li>
-            <li>
-              <b>useToast()</b> — хук для виклику сповіщень. Повертає методи:
-              <ul className="list-disc pl-5">
-                <li>
-                  <b>success(message)</b> - зелений тост успіху
-                </li>
-                <li>
-                  <b>error(message)</b> - червоний тост помилки
-                </li>
-                <li>
-                  <b>info(message)</b> - синій інформаційний тост
-                </li>
-                <li>
-                  <b>warning(message)</b> - жовтий тост попередження
-                </li>
-                <li>
-                  <b>remove(id)</b> — видаляє тост вручну
-                </li>
-              </ul>
-            </li>
-          </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1468,33 +1040,50 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>open</b>: boolean - показ/приховування
-            </li>
-            <li>
-              <b>onClose</b>: {`() => void`} — виклик при закритті
-            </li>
-            <li>
-              <b>title</b>?: string - заголовок у шапці
-            </li>
-            <li>
-              <b>closeOnBackdrop</b>?: boolean (default true) - закриття по
-              кліку по фону
-            </li>
-            <li>
-              <b>labelledBy</b>?: string - aria-атрибут
-            </li>
-            <li>
-              <b>blur</b>?: boolean - додатковий блюр на бекдропі
-            </li>
-            <li>
-              <b>style</b>?: "base" | "glass" | "dark" | "gray" | "red" |
-              "orange" | "amber" | "yellow" | "green" | "blue" | "violet" —
-              палітра бекдропа/панелі
-            </li>
-            <li>Довільна розмітка всередині</li>
-          </ul>
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Вікно поверх контенту.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const [open, setOpen] = React.useState(false);
+<>
+  <Button onClick={() => setOpen(true)}>Open</Button>
+  <Modal open={open} onClose={() => setOpen(false)} title="Base">
+    <p>Content</p>
+  </Modal>
+</>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  <code>open</code> - стан відкриття. <em>Required</em>
+                </li>
+                <li>
+                  <code>onClose</code> - колбек закриття. <em>Required</em>
+                </li>
+                <li>
+                  <code>title</code> - заголовок діалогу.
+                </li>
+                <li>
+                  <code>closeOnBackdrop</code> - закриття кліком по фону.{' '}
+                  <em>
+                    По-замочуванню: <code>true</code>
+                  </em>
+                </li>
+                <li>
+                  <code>style</code> - тема:{' '}
+                  <code>
+                    base | glass | dark | gray | red | orange | amber| yellow |
+                    green | blue | violet
+                  </code>
+                </li>
+              </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
 
@@ -1511,82 +1100,41 @@ const App: React.FC = () => {
           />
         </SectionContainer>
         <Usage>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>
-              <b>useForm()</b> - хук стану форми.
-            </li>
-            <li>
-              Повертає:
+          <div className="space-y-3 text-sm">
+            <div>
+              <p>Легка обгортка для керування станом і валідацією форм.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Quick start</h3>
+              <pre className="bg-gray-100 p-3 rounded-md overflow-auto">
+                <code>{`const form = useForm(initial, rules);
+
+<Form form={form} onSubmit={(result) => console.log(result)}>
+  <InputField form={form} name="fullName" label="Ім'я" />
+  <Button type="submit">Надіслати</Button>
+</Form>`}</code>
+              </pre>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Основні пропси</h3>
               <ul className="list-disc pl-5">
                 <li>
-                  <b>values</b> - поточні значення
+                  <code>Form.form</code> - інстанс форми. <em>Required</em>
                 </li>
                 <li>
-                  <b>errors</b> - помилки валідації
+                  <code>Form.onSubmit(values)</code> - обробник відправки.{' '}
+                  <em>Required</em>
                 </li>
                 <li>
-                  <b>setValue(name, v)</b> - встановити значення поля
-                </li>
-                <li>
-                  <b>getValue(name)</b> - отримати значення поля
-                </li>
-                <li>
-                  <b>handleChange(name)</b> - фабрика onChange для поля
-                </li>
-                <li>
-                  <b>handleSubmit(fn)</b> - якщо без помилок викликає{" "}
-                  <code>fn</code>
-                </li>
-                <li>
-                  <b>reset()</b> - скинути/перезаписати значення, очистити
-                  помилки
+                  <code>InputField/CheckboxField/RadioGroupField</code> -
+                  зв’язок з полями за <code>name</code>.
                 </li>
               </ul>
-            </li>
-            <li>
-              <b>rules</b>: правила для валідації
-              <pre className="text-xs bg-gray-50 p-2 rounded mt-1">{`{
-  fieldName: {
-    required?: boolean | string, // true або "повідомлення"
-    minLen?: number,             // мінімальна довжина (для string)
-    email?: boolean | string     // перевірка e-mail або своє повідомлення
-  }
-}`}</pre>
-            </li>
-            <li>
-              <b>{`<Form form onSubmit />`}</b> — обгортка для тегу{" "}
-              <code>form</code> та підключає handleSubmit.
-            </li>
-            <li>
-              <b>&lt;InputField /&gt;</b> — текстові/email/number:
-              <ul className="list-disc pl-5">
-                <li>
-                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>type?</b>,{" "}
-                  <b>placeholder?</b>, <b>className?</b>
-                </li>
-                <li>Підсвічує помилку</li>
-              </ul>
-            </li>
-            <li>
-              <b>&lt;CheckboxField /&gt;</b> — булеве поле:
-              <ul className="list-disc pl-5">
-                <li>
-                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>className?</b>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <b>&lt;RadioGroupField /&gt;</b> — вибір з опцій:
-              <ul className="list-disc pl-5">
-                <li>
-                  <b>form</b>, <b>name</b>, <b>label?</b>, <b>options</b>
-                  <b>className?</b>
-                </li>
-              </ul>
-            </li>
-          </ul>
+            </div>
+          </div>
         </Usage>
       </Section>
+
     </ShowcaseLayout>
   );
 };
